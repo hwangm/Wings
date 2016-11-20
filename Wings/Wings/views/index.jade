@@ -2,8 +2,10 @@
 
 block content
   div.row#navHeader
-    p#stepCounter(style="display:inline-block") Step 1 of 4
-    p(style="display:inline-block;float:right")
+    span#stepCounter(style="display:inline-block") Step 1 of 4
+    span &#8226;
+    a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px;display:none") Back to Step 1
+    span(style="display:inline-block;float:right")
       b WINGS
   form
     div.row#currentStepContainer
@@ -45,30 +47,38 @@ block content
             strong What is your flight number?
         input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
     div.row#buttonContainer
-      button.btn.btn-primary(type="button", id="backButton", value="Previous", style="display:none") Previous
-      button.btn.btn-primary(type="button", id="nextButton", value="Next") Next 
+      //- button.btn.btn-primary(type="button", id="backButton", value="Previous", style="display:none")
+      //-   span
+      //-     span.glyphicon.glyphicon-chevron-left(style="display:inline-block")
+      //-     |Previous
+      button.btn.btn-primary(type="button", id="nextButton", value="Next") 
+        span
+          |Next 
+          span.glyphicon.glyphicon-chevron-right
     
   script.
     $(document).ready(function() {
       var stepid = 1;
       $('#nextButton').on('click', function() {
         if(stepid >= 1){
-          $('#backButton').show();
+          $('#backLink').show();
         }
         if(stepid >= 3){
           $('#nextButton').hide();
         }
         $('#step'+stepid).hide(0, function() {
+          changeStepCounter(stepid, true);
           var nextStepHTML = $('#step'+(stepid + 1));
           $(nextStepHTML).show();
           stepid = stepid + 1;
         });
       });
       
-      $('#backButton').on('click', function() {
+      $('#backLink').on('click', function() {
         $('#step'+stepid).hide(0, function() {
+          changeStepCounter(stepid, false);
           if(stepid == 2){
-            $('#backButton').hide();
+            $('#backLink').hide();
           }
           $('#nextButton').show();
           $('#step'+(stepid-1)).show();
@@ -77,10 +87,19 @@ block content
       });
 
       function changeStepCounter(stepid, forwards){
-
-        $('#stepCounter').text('Step '+(stepid+1));
+        if(forwards == true){
+          $('#stepCounter').text('Step '+(stepid + 1)+' of 4');
+          $('#backLink').text('Back to Step '+(stepid));
+        }
+        else{
+          $('#stepCounter').text('Step '+(stepid - 1)+' of 4');
+          $('#backLink').text('Back to Step '+(stepid - 2));
+        }
       }
-
+      $('#input1').keydown(function(event) {
+        console.log(event.key);
+        console.log($('#input1').val());
+      });
 
     });
         
