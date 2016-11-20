@@ -1,9 +1,71 @@
 ﻿extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-
-  h1 Where are you coming from?
-  div#testform
-    input(type="text", name="startlocation")
+  form
+    div.row#currentStepContainer
+      div.form-group(id="step1")
+        label(for="input1")
+          h3 Where are you coming from?
+        input.form-control(type="text", name="startlocation", id="input1", placeholder="Enter your address")
+      div.form-group(style="display:none", id="step2")
+        label(for="input2")
+          h3 Which airport are you going to?
+        input.form-control(type="text", name="airportLocation", id="input2", placeholder="Enter Airport Name or Code")
+      div.form-inline(style="display:none", id="step3")
+        h3 How are you traveling?
+        div.row
+          div.col-md-12
+            label(for="input3") I'm traveling 
+            select.form-control(id="input3")
+              option by car
+              option by train
+              option by bike
+              option on foot
+            label(for="input4") with 
+            select.form-control(id="input4")
+              option no others
+              option 1 other person
+              option 2 other people
+              option 3 other people
+            label(for="input5") and I am checking
+            select.form-control(id="input5")
+              option 0 bags
+              option 1 bag 
+              option 2 bags
+      div.form-group(style="display:none", id="step4")
+        label(for="input6") 
+          h3 What is your flight number?
+        input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
+    div.row#buttonContainer
+      button.btn.btn-primary(type="button", id="backButton", value="Previous", style="display:none") Previous
+      button.btn.btn-primary(type="button", id="nextButton", value="Next") Next 
+    
+  script.
+    $(document).ready(function() {
+      var stepid = 1;
+      $('#nextButton').on('click', function() {
+        if(stepid >= 1){
+          $('#backButton').show();
+        }
+        if(stepid >= 3){
+          $('#nextButton').hide();
+        }
+        $('#step'+stepid).hide(0, function() {
+          var nextStepHTML = $('#step'+(stepid + 1));
+          $(nextStepHTML).show();
+          stepid = stepid + 1;
+        });
+      });
+      
+      $('#backButton').on('click', function() {
+        $('#step'+stepid).hide(0, function() {
+          if(stepid == 2){
+            $('#backButton').hide();
+          }
+          $('#nextButton').show();
+          $('#step'+(stepid-1)).show();
+          stepid = stepid-1;
+        });
+      });
+    });
+        

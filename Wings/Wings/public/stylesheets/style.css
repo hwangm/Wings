@@ -5,3 +5,10 @@ body {
 a {
   color: #00b7ff;
 }
+#step3 select{
+  width:150px;
+  margin:10px 10px 10px 10px;
+}
+#buttonContainer button{
+  margin:auto 5px auto 0;
+}
