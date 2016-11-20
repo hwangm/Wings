@@ -1,18 +1,25 @@
 ﻿extends layout
 
 block content
+  div.row#navHeader
+    p#stepCounter(style="display:inline-block") Step 1 of 4
+    p(style="display:inline-block;float:right")
+      b WINGS
   form
     div.row#currentStepContainer
       div.form-group(id="step1")
         label(for="input1")
-          h3 Where are you coming from?
+          h3 
+            strong Where are you coming from?
         input.form-control(type="text", name="startlocation", id="input1", placeholder="Enter your address")
       div.form-group(style="display:none", id="step2")
         label(for="input2")
-          h3 Which airport are you going to?
+          h3 
+            strong Which airport are you going to?
         input.form-control(type="text", name="airportLocation", id="input2", placeholder="Enter Airport Name or Code")
       div.form-inline(style="display:none", id="step3")
-        h3 How are you traveling?
+        h3 
+          strong How are you traveling?
         div.row
           div.col-md-12
             label(for="input3") I'm traveling 
@@ -34,7 +41,8 @@ block content
               option 2 bags
       div.form-group(style="display:none", id="step4")
         label(for="input6") 
-          h3 What is your flight number?
+          h3 
+            strong What is your flight number?
         input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
     div.row#buttonContainer
       button.btn.btn-primary(type="button", id="backButton", value="Previous", style="display:none") Previous
@@ -67,5 +75,12 @@ block content
           stepid = stepid-1;
         });
       });
+
+      function changeStepCounter(stepid, forwards){
+
+        $('#stepCounter').text('Step '+(stepid+1));
+      }
+
+
     });
         
