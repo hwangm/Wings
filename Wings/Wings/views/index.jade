@@ -2,59 +2,62 @@
 
 block content
   div.row#navHeader
-    span#stepCounter(style="display:inline-block") Step 1 of 4
-    span &#8226;
-    a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px;display:none") Back to Step 1
-    span(style="display:inline-block;float:right")
-      b WINGS
+    div.col-md-12
+      span#stepCounter(style="display:inline-block") Step 1 of 4
+      span &#8226;
+      a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px;display:none") Back to Step 1
+      span(style="display:inline-block;float:right")
+        b WINGS
   form
     div.row#currentStepContainer
-      div.form-group(id="step1")
-        label(for="input1")
+      div.col-md-12
+        div.form-group(id="step1")
+          label(for="input1")
+            h3 
+              strong Where are you coming from?
+          input.form-control(type="text", name="startlocation", id="input1", placeholder="Enter your address")
+        div.form-group(style="display:none", id="step2")
+          label(for="input2")
+            h3 
+              strong Which airport are you going to?
+          input.form-control(type="text", name="airportLocation", id="input2", placeholder="Enter Airport Name or Code")
+        div.form-inline(style="display:none", id="step3")
           h3 
-            strong Where are you coming from?
-        input.form-control(type="text", name="startlocation", id="input1", placeholder="Enter your address")
-      div.form-group(style="display:none", id="step2")
-        label(for="input2")
-          h3 
-            strong Which airport are you going to?
-        input.form-control(type="text", name="airportLocation", id="input2", placeholder="Enter Airport Name or Code")
-      div.form-inline(style="display:none", id="step3")
-        h3 
-          strong How are you traveling?
-        div.row
-          div.col-md-12
-            label(for="input3") I'm traveling 
-            select.form-control(id="input3")
-              option by car
-              option by train
-              option by bike
-              option on foot
-            label(for="input4") with 
-            select.form-control(id="input4")
-              option no others
-              option 1 other person
-              option 2 other people
-              option 3 other people
-            label(for="input5") and I am checking
-            select.form-control(id="input5")
-              option 0 bags
-              option 1 bag 
-              option 2 bags
-      div.form-group(style="display:none", id="step4")
-        label(for="input6") 
-          h3 
-            strong What is your flight number?
-        input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
+            strong How are you traveling?
+          div.row
+            div.col-md-12
+              label(for="input3") I'm traveling 
+              select.form-control(id="input3")
+                option by car
+                option by train
+                option by bike
+                option on foot
+              label(for="input4") with 
+              select.form-control(id="input4")
+                option no others
+                option 1 other person
+                option 2 other people
+                option 3 other people
+              label(for="input5") and I am checking
+              select.form-control(id="input5")
+                option 0 bags
+                option 1 bag 
+                option 2 bags
+        div.form-group(style="display:none", id="step4")
+          label(for="input6") 
+            h3 
+              strong What is your flight number?
+          input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
     div.row#buttonContainer
-      //- button.btn.btn-primary(type="button", id="backButton", value="Previous", style="display:none")
-      //-   span
-      //-     span.glyphicon.glyphicon-chevron-left(style="display:inline-block")
-      //-     |Previous
-      button.btn.btn-primary(type="button", id="nextButton", value="Next") 
-        span
-          |Next 
-          span.glyphicon.glyphicon-chevron-right
+      div.col-md-12
+        button.btn.btn-primary(type="button", id="nextButton", value="Next") 
+          span
+            |Next 
+            span.glyphicon.glyphicon-chevron-right
+        button.btn.btn-primary(type="submit", id="submitForm", value="Submit",style="display:none")
+          span
+            |Calculate
+            span.glyphicon.glyphicon-plane
     
   script.
     $(document).ready(function() {
@@ -65,6 +68,7 @@ block content
         }
         if(stepid >= 3){
           $('#nextButton').hide();
+          $('#submitForm').show();
         }
         $('#step'+stepid).hide(0, function() {
           changeStepCounter(stepid, true);
@@ -81,6 +85,7 @@ block content
             $('#backLink').hide();
           }
           $('#nextButton').show();
+          $('#submitForm').hide();
           $('#step'+(stepid-1)).show();
           stepid = stepid-1;
         });
