@@ -4,8 +4,9 @@ block content
   div.row#navHeader
     div.col-md-12
       span#stepCounter(style="display:inline-block") Step 1 of 4
-      span &#8226;
-      a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px;display:none") Back to Step 1
+      span(id="back" style="display:none")
+        span &#8226;
+        a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px") Back to Step 1
       span(style="display:inline-block;float:right")
         b WINGS
   form
@@ -54,7 +55,7 @@ block content
           span
             |Next 
             span.glyphicon.glyphicon-chevron-right
-        button.btn.btn-primary(type="submit", id="submitForm", value="Submit",style="display:none")
+        button.btn.btn-success(type="submit", id="submitForm", value="Submit",style="display:none")
           span
             |Calculate
             span.glyphicon.glyphicon-plane
@@ -64,7 +65,7 @@ block content
       var stepid = 1;
       $('#nextButton').on('click', function() {
         if(stepid >= 1){
-          $('#backLink').show();
+          $('#back').show();
         }
         if(stepid >= 3){
           $('#nextButton').hide();
@@ -82,7 +83,7 @@ block content
         $('#step'+stepid).hide(0, function() {
           changeStepCounter(stepid, false);
           if(stepid == 2){
-            $('#backLink').hide();
+            $('#back').hide();
           }
           $('#nextButton').show();
           $('#submitForm').hide();

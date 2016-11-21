@@ -12,8 +12,6 @@ a {
 #buttonContainer button {
   margin: auto 5px auto 0;
   width: 100%;
-  max-width: 1000px;
-  margin-top: 100%;
 }
 #stepCounter {
   margin: auto 5px auto 0;
