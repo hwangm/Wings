@@ -1,5 +1,4 @@
-﻿doctype mobile
-//doctype html
+﻿doctype html
 html
   head
     title= title
@@ -7,6 +6,9 @@ html
     link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
     script(src='/jQuery/jquery.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
+    script(src='/plugins/jquery.backstretch.min.js')
   body
     div.container
       block content
+    script.
+      $.backstretch('/images/background.jpg');

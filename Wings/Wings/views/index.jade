@@ -16,7 +16,9 @@ block content
           label(for="input1")
             h3 
               strong Where are you coming from?
-          input.form-control(type="text", name="startlocation", id="input1", placeholder="Enter your address")
+          <br />
+          input.form-control.input-lg(type="text", name="startlocation", id="input1", placeholder="Enter your address", style="display:inline-block;width:50%")
+          input.form-control.input-lg(type="text", name="test", id="test", placeholder="Enter airport code",style="display:inline-block;width:50%")
         div.form-group(style="display:none", id="step2")
           label(for="input2")
             h3 
@@ -59,8 +61,11 @@ block content
           span
             |Calculate
             span.glyphicon.glyphicon-plane
-    
+
   script.
+    function initMap(){
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('input1'));
+    }
     $(document).ready(function() {
       var stepid = 1;
       $('#nextButton').on('click', function() {
@@ -102,10 +107,13 @@ block content
           $('#backLink').text('Back to Step '+(stepid - 2));
         }
       }
-      $('#input1').keydown(function(event) {
-        console.log(event.key);
+      //test to call a function every time user changes the value of input 1
+      //Will be used to call some sort of function to look up addresses
+      $('#input1').on('input', function(event) {
+        console.log(event);
         console.log($('#input1').val());
       });
 
+      
     });
-        
+  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
