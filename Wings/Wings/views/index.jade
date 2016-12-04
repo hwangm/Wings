@@ -55,6 +55,20 @@ block content
             h3 
               strong What is your flight number?
           input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
+    div.row#extraDetails
+      div.col-md-12 I'm 
+        span.dropdown
+          button.btn.inline-toggle.dropdown-toggle(href="#", id="travelMode", data-toggle="dropdown") driving
+          ul.dropdown-menu
+            li
+              a(href="#") driving
+            li
+              a(href="#") taking public transportation
+            li
+              a(href="#") biking
+            li
+              a(href="#") walking
+        
     //- div.row#buttonContainer
     //-   div.col-md-12
     //-     button.btn.btn-primary(type="button", id="nextButton", value="Next") 

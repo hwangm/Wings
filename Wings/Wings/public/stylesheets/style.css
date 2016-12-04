@@ -22,6 +22,9 @@ a {
   font-weight: bold;
   font-size: 20px;
 }
+#extraDetails {
+  color: #fff;
+}
 .nested-group input:focus {
   box-shadow: none;
 }
@@ -70,4 +73,8 @@ a {
 .nested-group label {
   display: block;
   color: #999;
+}
+.inline-toggle {
+  background-color: transparent;
+  color: #fff;
 }
