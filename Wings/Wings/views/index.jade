@@ -2,23 +2,27 @@
 
 block content
   div.row#navHeader
-    div.col-md-12
-      span#stepCounter(style="display:inline-block") Step 1 of 4
-      span(id="back" style="display:none")
-        span &#8226;
-        a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px") Back to Step 1
-      span(style="display:inline-block;float:right")
-        b WINGS
+    div.col-md-12 W I N G S
+      //- span#stepCounter(style="display:inline-block") Step 1 of 4
+      //- span(id="back" style="display:none")
+      //-   span &#8226;
+      //-   a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px") Back to Step 1
+      //- span(style="display:inline-block;float:right")
+      //-   b WINGS
+  br
+  br
   form
     div.row#currentStepContainer
       div.col-md-12
-        div.form-group(id="step1")
-          label(for="input1")
-            h3 
-              strong Where are you coming from?
-          <br />
-          input.form-control.input-lg(type="text", name="startlocation", id="input1", placeholder="Enter your address", style="display:inline-block;width:50%")
-          input.form-control.input-lg(type="text", name="test", id="test", placeholder="Enter airport code",style="display:inline-block;width:50%")
+        div.form-group.nested-group(id="step1")
+          div#locationWrapper.col-md-7
+            label(for="location") Where are you coming from? 
+            input.form-control.input-lg(type="text", name="startlocation", id="location", placeholder="1234 Sesame St, Madison, WI 53719")
+          div#flightWrapper.col-md-3
+            label(for="flight") What's your flight number? 
+            input.form-control.input-lg(type="text", name="test", id="flight", placeholder="DL2011")
+          div.inline-button.col-md-2
+            button.btn.btn-primary(type="button") Calculate
         div.form-group(style="display:none", id="step2")
           label(for="input2")
             h3 
@@ -51,20 +55,20 @@ block content
             h3 
               strong What is your flight number?
           input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
-    div.row#buttonContainer
-      div.col-md-12
-        button.btn.btn-primary(type="button", id="nextButton", value="Next") 
-          span
-            |Next 
-            span.glyphicon.glyphicon-chevron-right
-        button.btn.btn-success(type="submit", id="submitForm", value="Submit",style="display:none")
-          span
-            |Calculate
-            span.glyphicon.glyphicon-plane
+    //- div.row#buttonContainer
+    //-   div.col-md-12
+    //-     button.btn.btn-primary(type="button", id="nextButton", value="Next") 
+    //-       span
+    //-         |Next 
+    //-         span.glyphicon.glyphicon-chevron-right
+    //-     button.btn.btn-success(type="submit", id="submitForm", value="Submit",style="display:none")
+    //-       span
+    //-         |Calculate
+    //-         span.glyphicon.glyphicon-plane
 
   script.
     function initMap(){
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('input1'));
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
     }
     $(document).ready(function() {
       var stepid = 1;
