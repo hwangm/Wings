@@ -9,8 +9,7 @@ block content
       //-   a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px") Back to Step 1
       //- span(style="display:inline-block;float:right")
       //-   b WINGS
-  br
-  br
+  h3 Quickly figure out when to leave for the airport.
   form
     div.row#currentStepContainer
       div.col-md-12
@@ -22,7 +21,7 @@ block content
             label(for="flight") What's your flight number? 
             input.form-control.input-lg(type="text", name="test", id="flight", placeholder="DL2011")
           div.inline-button.col-md-2
-            button.btn.btn-primary(type="button") Calculate
+            button.btn.btn-primary.pull-right(type="button") Calculate
         div.form-group(style="display:none", id="step2")
           label(for="input2")
             h3 
@@ -56,18 +55,22 @@ block content
               strong What is your flight number?
           input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
     div.row#extraDetails
-      div.col-md-12 I'm 
-        span.dropdown
-          button.btn.inline-toggle.dropdown-toggle(href="#", id="travelMode", data-toggle="dropdown") driving
-          ul.dropdown-menu
-            li
-              a(href="#") driving
-            li
-              a(href="#") taking public transportation
-            li
-              a(href="#") biking
-            li
-              a(href="#") walking
+      div.col-md-12 
+        span.more-options More options: I'm 
+        select.selectpicker.show-tick(id="modeTravel", data-width="fit", data-style="color:white;background-color:transparent;margin-left:5px;margin-right:5px;padding-top:4px")
+          option.custom-select(value="d") driving
+          option.custom-select(value="pt") taking public transportation
+          option.custom-select(value="w") walking
+        span.more-options to the airport, I'll be checking 
+        select.selectpicker.show-tick(id="bags", data-width="fit", data-style="color:white;background-color:transparent;margin-left:5px;margin-right:5px")
+          option.custom-select(value="0") 0
+          option.custom-select(value="1") 1
+          option.custom-select(value="2") 2+
+        span.more-options bags and I 
+        select.selectpicker.show-tick(id="hasTSAPre", data-width="fit", data-style="color:white;background-color:transparent;margin-left:5px;margin-right:5px")
+          option.custom-select(value="0") do not have
+          option.custom-select(value="1") have
+        span.more-options TSA Pre-Check.
         
     //- div.row#buttonContainer
     //-   div.col-md-12
