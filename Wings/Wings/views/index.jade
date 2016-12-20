@@ -3,12 +3,6 @@
 block content
   div.row#navHeader
     div.col-md-12 W I N G S
-      //- span#stepCounter(style="display:inline-block") Step 1 of 4
-      //- span(id="back" style="display:none")
-      //-   span &#8226;
-      //-   a(href="#", id="backLink", style="display:inline-block;margin:auto 5px auto 5px") Back to Step 1
-      //- span(style="display:inline-block;float:right")
-      //-   b WINGS
   h3 Quickly figure out when to leave for the airport.
   form
     div.row#currentStepContainer
@@ -22,38 +16,6 @@ block content
             input.form-control.input-lg(type="text", name="test", id="flight", placeholder="DL2011")
           div.inline-button.col-md-2
             button.btn.btn-primary.pull-right(type="button") Calculate
-        div.form-group(style="display:none", id="step2")
-          label(for="input2")
-            h3 
-              strong Which airport are you going to?
-          input.form-control(type="text", name="airportLocation", id="input2", placeholder="Enter Airport Name or Code")
-        div.form-inline(style="display:none", id="step3")
-          h3 
-            strong How are you traveling?
-          div.row
-            div.col-md-12
-              label(for="input3") I'm traveling 
-              select.form-control(id="input3")
-                option by car
-                option by train
-                option by bike
-                option on foot
-              label(for="input4") with 
-              select.form-control(id="input4")
-                option no others
-                option 1 other person
-                option 2 other people
-                option 3 other people
-              label(for="input5") and I am checking
-              select.form-control(id="input5")
-                option 0 bags
-                option 1 bag 
-                option 2 bags
-        div.form-group(style="display:none", id="step4")
-          label(for="input6") 
-            h3 
-              strong What is your flight number?
-          input.form-control(type="text", placeholder="e.g. UA360", name="flightNumber", id="input6")  
     div.row#extraDetails
       div.col-md-12 
         span.more-options More options: I'm 
@@ -71,70 +33,9 @@ block content
           option.custom-select(value="0") do not have
           option.custom-select(value="1") have
         span.more-options TSA Pre-Check.
-        
-    //- div.row#buttonContainer
-    //-   div.col-md-12
-    //-     button.btn.btn-primary(type="button", id="nextButton", value="Next") 
-    //-       span
-    //-         |Next 
-    //-         span.glyphicon.glyphicon-chevron-right
-    //-     button.btn.btn-success(type="submit", id="submitForm", value="Submit",style="display:none")
-    //-       span
-    //-         |Calculate
-    //-         span.glyphicon.glyphicon-plane
 
   script.
     function initMap(){
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
     }
-    $(document).ready(function() {
-      var stepid = 1;
-      $('#nextButton').on('click', function() {
-        if(stepid >= 1){
-          $('#back').show();
-        }
-        if(stepid >= 3){
-          $('#nextButton').hide();
-          $('#submitForm').show();
-        }
-        $('#step'+stepid).hide(0, function() {
-          changeStepCounter(stepid, true);
-          var nextStepHTML = $('#step'+(stepid + 1));
-          $(nextStepHTML).show();
-          stepid = stepid + 1;
-        });
-      });
-      
-      $('#backLink').on('click', function() {
-        $('#step'+stepid).hide(0, function() {
-          changeStepCounter(stepid, false);
-          if(stepid == 2){
-            $('#back').hide();
-          }
-          $('#nextButton').show();
-          $('#submitForm').hide();
-          $('#step'+(stepid-1)).show();
-          stepid = stepid-1;
-        });
-      });
-
-      function changeStepCounter(stepid, forwards){
-        if(forwards == true){
-          $('#stepCounter').text('Step '+(stepid + 1)+' of 4');
-          $('#backLink').text('Back to Step '+(stepid));
-        }
-        else{
-          $('#stepCounter').text('Step '+(stepid - 1)+' of 4');
-          $('#backLink').text('Back to Step '+(stepid - 2));
-        }
-      }
-      //test to call a function every time user changes the value of input 1
-      //Will be used to call some sort of function to look up addresses
-      $('#input1').on('input', function(event) {
-        console.log(event);
-        console.log($('#input1').val());
-      });
-
-      
-    });
   script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
