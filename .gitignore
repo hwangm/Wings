@@ -13,7 +13,7 @@
 x64/
 build/
 bld/
-[Bb]in/
+# [Bb]in/
 [Oo]bj/
 
 # Roslyn cache directories
@@ -187,3 +187,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+Wings/Wings/bin/Microsoft.NodejsTools.WebRole.dll
