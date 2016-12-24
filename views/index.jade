@@ -33,9 +33,14 @@ block content
           option.custom-select(value="0") do not have
           option.custom-select(value="1") have
         span.more-options TSA Pre-Check.
-
+    div.row#results
   script.
     function initMap(){
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
+      var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
     }
+    $(document).ready(function() {
+      $('#flight').autocomplete({
+        source: ["DL2011","DL3000","WN105","AK500"]
+      });
+    });
   script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")

@@ -1,0 +1,14 @@
+branch-defaults:
+  default:
+    environment: Custom-env
+environment-defaults:
+  Custom-env:
+    branch: null
+    repository: null
+global:
+  application_name: Hot Wings
+  default_ec2_keyname: Andrew
+  default_platform: 64bit Amazon Linux 2016.09 v3.2.0 running Node.js
+  default_region: us-west-1
+  profile: eb-cli
+  sc: null

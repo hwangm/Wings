@@ -5,6 +5,11 @@
 *.suo
 *.user
 *.sln.docstates
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
 
 # Build results
 [Dd]ebug/

@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var $ = require('jquery');
+var jquery_ui = require('jquery-ui');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
