@@ -104,3 +104,6 @@ span.filter-option.pull-left {
   width: auto !important;
   padding-right: 2px;
 }
+.ui-menu .ui-menu-item {
+  font-size: 14px;
+}
