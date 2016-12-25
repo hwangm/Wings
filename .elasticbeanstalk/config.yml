@@ -1,6 +1,8 @@
 branch-defaults:
   default:
     environment: Custom-env
+  master:
+    environment: Custom-env
 environment-defaults:
   Custom-env:
     branch: null
@@ -11,4 +13,4 @@ global:
   default_platform: 64bit Amazon Linux 2016.09 v3.2.0 running Node.js
   default_region: us-west-1
   profile: eb-cli
-  sc: null
+  sc: git
