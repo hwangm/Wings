@@ -5,10 +5,14 @@
 *.suo
 *.user
 *.sln.docstates
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
+
+
+# Elastic Beanstalk Files
+
+.elasticbeanstalk/*
+
+!.elasticbeanstalk/*.cfg.yml
+
 !.elasticbeanstalk/*.global.yml
 
 # Build results
@@ -18,7 +22,6 @@
 x64/
 build/
 bld/
-# [Bb]in/
 [Oo]bj/
 
 # Roslyn cache directories
@@ -192,4 +195,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
-Wings/Wings/bin/Microsoft.NodejsTools.WebRole.dll
+/bin/Microsoft.NodejsTools.WebRole.dll
