@@ -1,6 +1,7 @@
 body {
   padding: 50px;
   font: 14px sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 a {
   color: #00b7ff;
@@ -23,6 +24,7 @@ a {
   font-size: 16px;
 }
 #extraDetails {
+  margin-top: 6px;
   color: #fff;
 }
 .nested-group input:focus {
@@ -33,6 +35,7 @@ a {
   border-top-right-radius: 0;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  border-right: 1px solid #e5e5e5;
 }
 .nested-group input {
   margin-left: -5px;
@@ -40,38 +43,39 @@ a {
   border-style: solid;
   background-color: #fff;
   box-shadow: inset 0 0 0 0 #f00;
-  padding: 10px 16px 10px 5px;
+  padding: 0 16px 8px 5px;
 }
 .nested-group button {
-  background-color: #000;
+  background-color: #0f2332;
   color: #fff;
-  border-color: #fff;
-  padding: 21px 12px 21px 12px;
-  width: 100px;
-  font-size: 16px;
+  padding: 21px 16px 21px 16px;
+  width: auto;
   font-weight: bold;
 }
 .nested-group .inline-button {
   display: inline-block;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  padding-right: 9px;
   background-color: #fff;
-  border: 1px solid #ccc;
   margin-bottom: 0;
   border-left-color: #fff;
   border-left-width: 0;
   margin-left: -1px;
   height: auto;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 .nested-group div {
   display: inline-block;
   background-color: #fff;
-  padding: 10px 15px 5px 15px;
-  border: 1px solid #ccc;
+  padding: 12px 15px 2px 15px;
 }
 .nested-group label {
   display: block;
-  color: #999;
+  color: #191c23;
+  font-weight: normal;
+  margin-bottom: 2px;
 }
 .inline-toggle {
   background-color: transparent;
@@ -79,20 +83,24 @@ a {
 }
 .more-options {
   color: #808080;
-  font-weight: 700;
 }
 body > div.container > h3 {
   color: #fff;
-  font-size: 30px;
+  font-size: 28px;
+  line-height: 36px;
   font-weight: bold;
+  margin-bottom: 16px;
+  margin-top: 48px;
 }
 #extraDetails > div > div > button {
   color: #fff;
   background-color: transparent;
   padding-top: 4px;
-  padding-left: 6px;
-  padding-right: 20px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 span.filter-option.pull-left {
   font-weight: 700;
+  width: auto !important;
+  padding-right: 2px;
 }
