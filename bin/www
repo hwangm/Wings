@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var debug = require('debug')('wings');
+var debug = require('debug')('Wings');
 var app = require('../main');
 
 app.set('port', process.env.PORT || 8081);
