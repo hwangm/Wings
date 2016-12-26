@@ -4,7 +4,7 @@ block content
   div.row#navHeader
     div.col-md-12 W I N G S
   h3 Quickly figure out when to leave for the airport.
-  form
+  form(method="get", name="form1", id="form1")
     div.row#currentStepContainer
       div.col-md-12
         div.form-group.nested-group(id="step1")
@@ -15,7 +15,7 @@ block content
             label(for="flight") What's your flight number?
             input.form-control.input-lg(type="text", name="test", id="flight", placeholder="DL2011")
           div.inline-button.col-md-2
-            button.btn.btn-primary.pull-right(type="button") Calculate
+            button.btn.btn-primary.pull-right(type="button", id="calculateButton") Calculate
     div.row#extraDetails
       div.col-md-12
         span.more-options More options: I'm
@@ -33,6 +33,11 @@ block content
           option.custom-select(value="0") do not have
           option.custom-select(value="1") have
         span.more-options TSA Pre-Check.
+    br
+    br
+    br
+    div.row.hidden#loadingRow
+      img(src="/images/hourglass.gif", alt="loading image", style="display:block;margin:auto")
     div.row#results
   script.
     function initMap(){
@@ -41,6 +46,9 @@ block content
     $(document).ready(function() {
       $('#flight').autocomplete({
         source: ["DL2011","DL3000","WN105","AK500"]
+      });
+      $('#calculateButton').click(function() {
+        $('#loadingRow').removeClass('hidden');
       });
     });
   script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
