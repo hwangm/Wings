@@ -175,6 +175,8 @@ span.filter-option.pull-left {
     border: none;
     box-shadow: none;
     color: #fff;
+    padding: 12px 0 4px 0;
+    border-radius: 0 !important;
   }
   .nested-group div ::-webkit-input-placeholder,
   .nested-group input ::-webkit-input-placeholder {
@@ -193,10 +195,26 @@ span.filter-option.pull-left {
   .nested-group input :-ms-input-placeholder {
     color: rgba(255,255,255,0.3);
   }
+  .nested-group input {
+    padding: 5px !important;
+  }
+  .nested-group label {
+    color: #fff;
+  }
   .col-md-6,
-  .col-md-3,
-  .col-md-2 {
+  .col-md-3 {
     width: 100% !important;
     display: block;
+    margin-bottom: 8px;
+  }
+  .col-md-6 {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+  }
+  .col-md-3 {
+    border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+  }
+  .col-md-2 {
+    display: none !important;
   }
 }
