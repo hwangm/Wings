@@ -23,7 +23,7 @@ block content
           option.custom-select(value="DRIVING") driving
           option.custom-select(value="TRANSIT") taking public transportation
           option.custom-select(value="WALKING") walking
-        span.more-options to the airport, I'll be checking
+        span.more-options to the airport, I'm checking
         select.selectpicker.show-tick(id="bags", data-width="fit", data-style="color:white;background-color:transparent;margin-left:5px;margin-right:5px")
           option.custom-select(value="0") 0
           option.custom-select(value="1") 1
@@ -36,11 +36,8 @@ block content
     div.row#mobileButton
       div.col-md-12.nested-group
         button.btn.btn-primary(type="button", id="calculateButton") Calculate
-    br
-    br
-    br
     div.row
-      img#loadingRow.hidden(src="/images/spinner.png", alt="loading image", style="display:block;margin:auto")
+      img#loadingRow.hidden(src="/images/spinner.png", alt="loading image")
     div.row#results
       div.col-md-12#timeToAirport
   script.
