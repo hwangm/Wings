@@ -20,9 +20,9 @@ block content
       div.col-md-12
         span.more-options More options: I'm
         select.selectpicker.show-tick(id="modeTravel", data-width="fit", data-style="color:white;background-color:transparent;margin-left:5px;margin-right:5px;padding-top:4px")
-          option.custom-select(value="d") driving
-          option.custom-select(value="pt") taking public transportation
-          option.custom-select(value="w") walking
+          option.custom-select(value="DRIVING") driving
+          option.custom-select(value="TRANSIT") taking public transportation
+          option.custom-select(value="WALKING") walking
         span.more-options to the airport, I'll be checking
         select.selectpicker.show-tick(id="bags", data-width="fit", data-style="color:white;background-color:transparent;margin-left:5px;margin-right:5px")
           option.custom-select(value="0") 0
@@ -69,7 +69,7 @@ block content
         directionsService.route({
           origin: address,
           destination: airport,
-          travelMode: 'DRIVING'
+          travelMode: modeTravel
         }, function(response, status) {
           if(status == "OK"){
             console.log('success, time incoming: ');
