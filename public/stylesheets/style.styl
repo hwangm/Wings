@@ -1,7 +1,5 @@
 /*
-
- General styles for the page
-
+* General styles
 */
 
 body
@@ -11,7 +9,9 @@ body
 a
   color: #00B7FF
 
-// Styles for the Wings logo
+/*
+* Styles for the Wings logo and intro text ("Quickly figure out what time to leave for the airport")
+*/
 
 #navHeader div
   text-align: center
@@ -19,18 +19,18 @@ a
   font-weight: bold
   font-size: 16px
 
-#step3 select
-  margin: 10px 10px 10px 10px
-  width: 150px
-#buttonContainer button
-  margin:auto 5px auto 0
-  width:100%
-#stepCounter
-  margin:auto 5px auto 0
-
-#extraDetails
-  margin-top: 6px
+body > div.container > h3
   color: white
+  font-size: 28px
+  line-height: 36px
+  font-weight: bold
+  margin-bottom: 16px
+  margin-top: 48px
+
+/*
+* Styles for the input form ("Where are you coming from?" and "What is your flight number?")
+*/
+
 .nested-group input:focus
   box-shadow: none
 .nested-group div:first-child
@@ -74,8 +74,19 @@ a
   display: block
   font-weight: normal
   margin-bottom: 2px
+::-webkit-input-placeholder
+  color: #C2C5CC
+:-moz-placeholder
+  color: #C2C5CC
+::-moz-placeholder
+  color: #C2C5CC
+  opacity: 1
+:-ms-input-placeholder
+  color: #C2C5CC
 
-// Styles for the Google Maps Dropdown
+/*
+* Styles for the Google Maps dropdown
+*/
 
 .pac-container
   -webkit-box-shadow: none
@@ -104,18 +115,16 @@ a
   display: none !important
 .pac-icon
   display: none !important
-.inline-toggle
-  background-color: transparent
+
+/*
+* Styles for the extra options (# of people, TSA-precheck, number of checked bags)
+*/
+
+#extraDetails
+  margin-top: 6px
   color: white
 .more-options
   color: grey
-body > div.container > h3
-  color: white
-  font-size: 28px
-  line-height: 36px
-  font-weight: bold
-  margin-bottom: 16px
-  margin-top: 48px
 #extraDetails > div > div > button
   color: white
   background-color: transparent
@@ -126,20 +135,16 @@ span.filter-option.pull-left
   font-weight:700
   width: auto !important
   padding-right: 2px
-.ui-menu .ui-menu-item
-  font-size: 14px
 #extraDetails > div > div
   padding-left: 2px
   padding-right: 2px
-::-webkit-input-placeholder
-  color: #C2C5CC
-:-moz-placeholder
-  color: #C2C5CC
-::-moz-placeholder
-  color: #C2C5CC
-  opacity: 1
-:-ms-input-placeholder
-  color: #C2C5CC
+
+/*
+* Styles for the dropdown of the flight suggestions
+*/
+
+.ui-menu .ui-menu-item
+  font-size: 14px
 #ui-id-1
   width: 300px
   font-size: 14px
