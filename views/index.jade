@@ -42,6 +42,7 @@ block content
     div.row
       img#loadingRow.hidden(src="/images/hourglass.gif", alt="loading image", style="display:block;margin:auto")
     div.row#results
+      div.col-md-12#timeToAirport 
   script.
     function initMap(){
       var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
@@ -64,14 +65,20 @@ block content
         }
         console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre)
         $('#loadingRow').removeClass('hidden');
+        $('#loadingRow').show(200);
         directionsService.route({
           origin: address,
           destination: airport,
           travelMode: 'DRIVING'
         }, function(response, status) {
           if(status == "OK"){
-            console.log('success, response incoming: ');
-            console.log(response);
+            console.log('success, time incoming: ');
+            //console.log(response);
+            var time = response.routes[0].legs[0].duration.text;
+            console.log(time);
+            $('#loadingRow').hide(200, function(){
+              $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+airport+' airport from '+address+'.');
+            });
           }
           else console.log('failure, response: '+response);
         }); 

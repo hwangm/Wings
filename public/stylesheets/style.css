@@ -9,6 +9,9 @@ body {
 a {
   color: #00b7ff;
 }
+#mobileButton {
+  display: none;
+}
 /*
 * Styles for the Wings logo and intro text ("Quickly figure out what time to leave for the airport")
 */
@@ -216,5 +219,13 @@ span.filter-option.pull-left {
   }
   .col-md-2 {
     display: none !important;
+  }
+  #mobileButton {
+    display: block;
+    margin-top: 24px;
+  }
+  #mobileButton button {
+    border: none !important;
+    width: 100%;
   }
 }
