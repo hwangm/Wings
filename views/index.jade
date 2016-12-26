@@ -45,7 +45,9 @@ block content
   script.
     function initMap(){
       var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
+      directionsService = new google.maps.DirectionsService;
     }
+
     $(document).ready(function() {
       $('#flight').autocomplete({
         source: ["DL2011","DL3000","WN105","AK500"]
@@ -56,8 +58,23 @@ block content
         var modeTravel = $('#modeTravel').val();
         var bags = $('#bags').val();
         var TSAPre = $('#hasTSAPre').val();
+        var airport = "SFO";
+        if(address == ""){
+          address = "3145 Manchester Court, Palo Alto, CA"
+        }
         console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre)
         $('#loadingRow').removeClass('hidden');
+        directionsService.route({
+          origin: address,
+          destination: airport,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if(status == "OK"){
+            console.log('success, response incoming: ');
+            console.log(response);
+          }
+          else console.log('failure, response: '+response);
+        }); 
       });
     });
-  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
+  script(async, defer, src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
