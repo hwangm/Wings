@@ -2,6 +2,7 @@
 html
   head
     title= title
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/jQueryUI/jquery-ui.min.css')
     link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
@@ -10,9 +11,10 @@ html
     script(src='/jQueryUI/jquery-ui.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
     script(src='/plugins/jquery.backstretch.min.js')
+    script(src='/plugins/retina.min.js')
     script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js")
   body
     div.container
       block content
     script.
-      $.backstretch('/images/background.jpg');
+      $.backstretch('/images/background-image.jpg');
