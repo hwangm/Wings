@@ -35,11 +35,14 @@ body > div.container > h3 {
 .nested-group input:focus {
   box-shadow: none;
 }
-.nested-group div:first-child {
+.nested-group div#locationWrapper {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  border-right: 1px solid #e5e5e5;
+}
+.nested-group div#flightWrapper {
   border-right: 1px solid #e5e5e5;
 }
 .nested-group input {
@@ -59,9 +62,7 @@ body > div.container > h3 {
 }
 .nested-group .inline-button {
   display: inline-block;
-  padding-top: 9px;
-  padding-bottom: 9px;
-  padding-right: 9px;
+  padding: 8px;
   background-color: #fff;
   margin-bottom: 0;
   border-left-color: #fff;
@@ -80,9 +81,9 @@ body > div.container > h3 {
 .nested-group label {
   display: block;
   font-weight: normal;
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
-.col-md-3 > input {
+div#flightWrapper > input {
   text-transform: uppercase;
 }
 ::-webkit-input-placeholder {
@@ -226,20 +227,23 @@ img#loadingRow {
   .nested-group label {
     color: #fff;
   }
-  .col-md-6,
+  .col-md-5,
+  .col-md-2,
   .col-md-3 {
     width: 100% !important;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
   }
-  .col-md-6 {
+  .col-md-5,
+  .col-md-3,
+  .col-md-2 {
     border-right: none !important;
     border-bottom: 1px solid rgba(255,255,255,0.3) !important;
   }
   .col-md-3 {
     border-bottom: 1px solid rgba(255,255,255,0.3) !important;
   }
-  .col-md-2 {
+  .inline-button {
     display: none !important;
   }
   #mobileButton {
@@ -263,7 +267,14 @@ img#loadingRow {
     display: block;
     padding: 0 13px;
   }
-  #extraDetails > div > div:nth-child(2) > button > span.bs-caret {
+  #extraDetails > div > div:nth-child(2) > button {
+    margin-bottom: 16px;
     text-align: right !important;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+    padding-bottom: 13px;
+  }
+  #extraDetails > div > div:nth-child(2) > button > span.filter-option.pull-left {
+    font-weight: 500;
   }
 }

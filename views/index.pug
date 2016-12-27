@@ -16,7 +16,8 @@ block content
             input.form-control.input-lg(type="text", name="flight", id="flight", placeholder="DL2011")
           div#dateWrapper.col-md-3
             label(for="date") Departure date
-            input.form-control.input-lg(type="date", name="departureDate", id="departureDate", value="01/01/2016")
+            - var currentDate = moment().format('YYYY-MM-DD');
+            input.form-control.input-lg(type="date", name="departureDate", id="departureDate", value=currentDate, min=currentDate)
           div.inline-button.col-md-2
             button.btn.btn-primary.pull-right(type="button", id="calculateButton") Calculate
     div.row#mobileGettingToAirport
@@ -54,14 +55,50 @@ block content
       directionsService = new google.maps.DirectionsService;
       fxml_url = 'http://hwangm:60a99937aef4e1b28d9e7887511480ea66be5a0e@flightxml.flightaware.com/json/FlightXML2/';
     }
+    // s is format y-m-d
+    // Returns a date object for 00:00:00 local time
+    // on the specified date
+    function parseDate(s, startOrEnd) {
+      var b = s.split('-');
+      if(startOrEnd == 's'){ //get Start Date at 0 hours
+        return Date.UTC(b[0], --b[1], b[2], 0, 0, 0)/1000;
+      }
+      else{                  //get End Date at 23:59:59 hours
+        return Date.UTC(b[0], --b[1], b[2], 23, 59, 59)/1000;
+      }
+    }
+    
+    //input example is 'DL2011' 
+    //Returns either the letters alone or numbers alone depending on w parameter
+    function parseFlight(s, w) {
+      if(w == 1){
+        return s.split(/[a-zA-Z]+/g)[1];
+      }
+      else {
+        return s.split(/[0-9]+/g)[0];
+      }
+    }
 
     $(document).ready(function() {
       $('#flight').autocomplete({
         source: ["DL2011","DL3000","WN105","AK500"]
       });
       $('#calculateButton').click(function() {
+        $('#loadingRow').removeClass('hidden');
+        $('#loadingRow').show(200);
+
+
+        var sDate = parseDate($('#departureDate').val(), 's');
+        var eDate = parseDate($('#departureDate').val(), 'e');
+        console.log(sDate + ' ' + eDate);
         var address = $('#location').val();
         var flight = $('#flight').val();
+        if(flight == ""){
+          flight = "UAL1892";
+        }
+        var airlineCode = parseFlight(flight, 0);
+        var flightNum = parseFlight(flight, 1);
+        console.log(airlineCode +' '+flightNum);
         var modeTravel = $('#modeTravel').val();
         var bags = $('#bags').val();
         var TSAPre = $('#hasTSAPre').val();
@@ -69,25 +106,62 @@ block content
         if(address == ""){
           address = "3145 Manchester Court, Palo Alto, CA"
         }
-        console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre)
-        $('#loadingRow').removeClass('hidden');
-        $('#loadingRow').show(200);
-        directionsService.route({
-          origin: address,
-          destination: airport,
-          travelMode: modeTravel
-        }, function(response, status) {
-          if(status == "OK"){
-            console.log('success, time incoming: ');
-            //console.log(response);
-            var time = response.routes[0].legs[0].duration.text;
-            console.log(time);
-            $('#loadingRow').hide(200, function(){
-              $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+airport+' airport from '+address+'.');
-            });
-          }
-          else console.log('failure, response: '+response);
-        });
+        console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre);
+
+        //- $.ajax({
+        //-   type: 'GET',
+        //-   url: fxml_url + 'AirlineFlightSchedules',
+        //-   data: {'startDate':sDate, 'endDate':eDate, 'airline':airlineCode, 'flightno':flightNum, 'howMany':1, 'offset':0},
+        //-   success: function(result) {
+        //-     console.log(result);
+        //-     //information stored in the result  
+        //-     //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
+        //-     //origin airport code
+        //-     if(result.AirlineFlightSchedulesResult.data.length == 0){
+        //-       $('#loadingRow').hide(200, function(){
+        //-           $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
+        //-         });
+        //-     }
+        //-     else{
+        //-       var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
+        //-       d = new Date(0);
+        //-       d.setUTCSeconds(utcTime);
+        //-       originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
+
+        //-       directionsService.route({
+        //-         origin: address,
+        //-         destination: originAirport,
+        //-         travelMode: modeTravel
+        //-       }, function(response, status) {
+        //-         if(status == "OK"){
+        //-           console.log('success, time incoming: ');
+        //-           //console.log(response);
+        //-           var time = response.routes[0].legs[0].duration.text;
+        //-           console.log(time);
+        //-           $('#loadingRow').hide(200, function(){
+        //-             $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+airport+' airport from '+address+'.');
+        //-           });
+        //-         }
+        //-         else {
+        //-           console.log('failure, response: '+response);
+        //-           $('#loadingRow').hide(200, function(){
+        //-             $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
+        //-           });
+        //-         }
+        //-       });
+        //-     }
+        //-   },
+        //-     error: function(data, text){
+        //-       $('#loadingRow').hide(200, function(){
+        //-           $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
+        //-       });
+        //-     },
+        //-     dataType: 'jsonp',
+        //-     jsonp: 'jsonp_callback',
+        //-     xhrFields: {withCredentials: true}
+        //- });
+
+        
       });
     });
   script(async, defer, src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
