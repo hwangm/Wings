@@ -124,6 +124,8 @@ body > div.container > h3
 * Styles for the extra options (# of people, TSA-precheck, number of checked bags)
 */
 
+#mobileGettingToAirport
+  display: none
 #extraDetails
   margin-top: 6px
   color: white
@@ -209,5 +211,12 @@ img#loadingRow
   #mobileButton button
     border: none !important
     width: 100%
-  div#extraOptions div.col-md-12 span 
+  #mobileGettingToAirport
+    display: block
+  #extraDetails > div
+    padding: 0
+  #extraDetails > div > span
     display: none
+  #extraDetails > div > div:nth-child(2)
+    display: block
+    padding: 0 13px
