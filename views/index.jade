@@ -42,8 +42,11 @@ block content
       div.col-md-12#timeToAirport
   script.
     function initMap(){
-      var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
+      //not using var tag indicates these variables are available globally, not just in the scope of initMap
+      //initializing the flightAware FlightXML URL 
+      autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
       directionsService = new google.maps.DirectionsService;
+      fxml_url = 'http://hwangm:60a99937aef4e1b28d9e7887511480ea66be5a0e@flightxml.flightaware.com/json/FlightXML2/';
     }
 
     $(document).ready(function() {
