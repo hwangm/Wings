@@ -82,6 +82,9 @@ body > div.container > h3 {
   font-weight: normal;
   margin-bottom: 2px;
 }
+.col-md-3 > input {
+  text-transform: uppercase;
+}
 ::-webkit-input-placeholder {
   color: #c2c5cc;
 }
@@ -135,6 +138,9 @@ body > div.container > h3 {
 /*
 * Styles for the extra options (# of people, TSA-precheck, number of checked bags)
 */
+#mobileGettingToAirport {
+  display: none;
+}
 #extraDetails {
   margin-top: 6px;
   color: #fff;
@@ -169,9 +175,25 @@ span.filter-option.pull-left {
   font-size: 14px;
 }
 /*
+* Styles for the loading spinner
+*/
+img#loadingRow {
+  display: block;
+  margin: 48px auto 8px auto;
+}
+/*
 * Media queries
 */
 @media (max-width: 992px) {
+  body {
+    padding: 16px;
+  }
+  #navHeader div {
+    font-size: 12px;
+  }
+  body > div.container > h3 {
+    margin: 16px 0;
+  }
   .nested-group div,
   .nested-group input {
     background-color: transparent;
@@ -227,5 +249,21 @@ span.filter-option.pull-left {
   #mobileButton button {
     border: none !important;
     width: 100%;
+  }
+  #mobileGettingToAirport {
+    display: block;
+  }
+  #extraDetails > div {
+    padding: 0;
+  }
+  #extraDetails > div > span {
+    display: none;
+  }
+  #extraDetails > div > div:nth-child(2) {
+    display: block;
+    padding: 0 13px;
+  }
+  #extraDetails > div > div:nth-child(2) > button > span.bs-caret {
+    text-align: right !important;
   }
 }
