@@ -76,6 +76,8 @@ body > div.container > h3
   display: block
   font-weight: normal
   margin-bottom: 2px
+.col-md-3 > input
+  text-transform: uppercase
 ::-webkit-input-placeholder
   color: #C2C5CC
 :-moz-placeholder
@@ -166,6 +168,8 @@ img#loadingRow
 @media (max-width: 992px)
   body
     padding: 16px
+  #navHeader div
+    font-size: 12px
   body > div.container > h3
     margin: 16px 0
   .nested-group div, .nested-group input
@@ -205,3 +209,5 @@ img#loadingRow
   #mobileButton button
     border: none !important
     width: 100%
+  div#extraOptions div.col-md-12 span 
+    display: none
