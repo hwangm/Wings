@@ -16,8 +16,7 @@ block content
             input.form-control.input-lg(type="text", name="flight", id="flight", placeholder="DL2011")
           div#dateWrapper.col-md-3
             label(for="date") Departure date
-            - var currentDate = moment().format('YYYY-MM-DD');
-            input.form-control.input-lg(type="date", name="departureDate", id="departureDate", value=currentDate, min=currentDate)
+            input.form-control.input-lg(type="date", name="departureDate", id="departureDate")
           div.inline-button.col-md-2
             button.btn.btn-primary.pull-right(type="button", id="calculateButton") Calculate
     div.row#mobileGettingToAirport
@@ -92,6 +91,9 @@ block content
     }
 
     $(document).ready(function() {
+      var fullDate = new Date();
+      var currentDate = fullDate.getFullYear() + '-' + (fullDate.getMonth()+1) + '-' +fullDate.getDate();
+      $('#departureDate').prop('value',currentDate);
       $('#flight').autocomplete({
         source: ["DL2011","DL3000","WN105","AK500"]
       });
