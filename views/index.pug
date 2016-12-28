@@ -117,59 +117,61 @@ block content
         }
         console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre);
 
-        $.ajax({
-          type: 'GET',
-          url: fxml_url + 'AirlineFlightSchedules',
-          data: {'startDate':sDate, 'endDate':eDate, 'airline':airlineCode, 'flightno':flightNum, 'howMany':1, 'offset':0},
-          success: function(result) {
-            console.log(result);
-            //information stored in the result  
-            //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
-            //origin airport code
-            if(result.AirlineFlightSchedulesResult.data.length == 0){
-              $('#loadingRow').hide(200, function(){
-                  $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
-                });
-            }
-            else{
-              var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
-              d = new Date(0);
-              d.setUTCSeconds(utcTime);
-              originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
+        //- $.ajax({
+        //-   type: 'GET',
+        //-   url: fxml_url + 'AirlineFlightSchedules',
+        //-   data: {'startDate':sDate, 'endDate':eDate, 'airline':airlineCode, 'flightno':flightNum, 'howMany':1, 'offset':0},
+        //-   success: function(result) {
+        //-     console.log(result);
+        //-     //information stored in the result  
+        //-     //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
+        //-     //origin airport code
+        //-     if(result.AirlineFlightSchedulesResult.data.length == 0){
+        //-       $('#loadingRow').hide(200, function(){
+        //-           $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
+        //-         });
+        //-     }
+        //-     else{
+        //-       var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
+        //-       d = new Date(0);
+        //-       d.setUTCSeconds(utcTime);
+        //-       originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
 
-              directionsService.route({
-                origin: address,
-                destination: originAirport,
-                travelMode: modeTravel
-              }, function(response, status) {
-                if(status == "OK"){
-                  console.log('success, time incoming: ');
-                  //console.log(response);
-                  var time = response.routes[0].legs[0].duration.text;
-                  console.log(time);
-                  $('#loadingRow').hide(200, function(){
-                    $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
-                  });
-                }
-                else {
-                  console.log('failure, response: '+response);
-                  $('#loadingRow').hide(200, function(){
-                    $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
-                  });
-                }
-              });
-            }
-          },
-            error: function(data, text){
-              $('#loadingRow').hide(200, function(){
-                  $('#timeToAirport').css('color','white').text('There was a problem getting the flight information. Please try again.');
-              });
-            },
-            dataType: 'jsonp',
-            jsonp: 'jsonp_callback',
-            xhrFields: {withCredentials: true}
+        //-       directionsService.route({
+        //-         origin: address,
+        //-         destination: originAirport,
+        //-         travelMode: modeTravel
+        //-       }, function(response, status) {
+        //-         if(status == "OK"){
+        //-           console.log('success, time incoming: ');
+        //-           //console.log(response);
+        //-           var time = response.routes[0].legs[0].duration.text;
+        //-           console.log(time);
+        //-           $('#loadingRow').hide(200, function(){
+        //-             $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
+        //-           });
+        //-         }
+        //-         else {
+        //-           console.log('failure, response: '+response);
+        //-           $('#loadingRow').hide(200, function(){
+        //-             $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
+        //-           });
+        //-         }
+        //-       });
+        //-     }
+        //-   },
+        //-     error: function(data, text){
+        //-       $('#loadingRow').hide(200, function(){
+        //-           $('#timeToAirport').css('color','white').text('There was a problem getting the flight information. Please try again.');
+        //-       });
+        //-     },
+        //-     dataType: 'jsonp',
+        //-     jsonp: 'jsonp_callback',
+        //-     xhrFields: {withCredentials: true}
+        //- });
+        $('#loadingRow').hide(200, function(){
+          $('#timeToAirport').css('color','white').text('It will take approximately 24 minutes to get to SFO airport from 3145 Manchester Court, Palo Alto CA');
         });
-
         
       });
     });
