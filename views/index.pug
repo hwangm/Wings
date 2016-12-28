@@ -60,9 +60,15 @@ block content
     // on the specified date
     function parseDate(s, startOrEnd) {
       var b = s.split('-');
-      if(startOrEnd == 's'){ //get Start Date at 0 hours
+      var cDate = new Date(); //get today's date to compare against start date
+      if(startOrEnd == 's'){ //get Start Date. If date is today, then use current timestamp. Otherwise, default to midnight.
         var d = new Date(b[0], --b[1], b[2], 0, 0, 0);
-        return d.valueOf()/1000;
+        if(cDate.toDateString() == d.toDateString()){
+          return Math.floor(cDate.valueOf()/1000);
+        }
+        else{
+          return d.valueOf()/1000;
+        }
       }
       else{                  //get End Date at 23:59:59 hours
         var d = new Date(b[0], --b[1], b[2], 23, 59, 59);
@@ -110,58 +116,58 @@ block content
         }
         console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre);
 
-        $.ajax({
-          type: 'GET',
-          url: fxml_url + 'AirlineFlightSchedules',
-          data: {'startDate':sDate, 'endDate':eDate, 'airline':airlineCode, 'flightno':flightNum, 'howMany':1, 'offset':0},
-          success: function(result) {
-            console.log(result);
-            //information stored in the result  
-            //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
-            //origin airport code
-            if(result.AirlineFlightSchedulesResult.data.length == 0){
-              $('#loadingRow').hide(200, function(){
-                  $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
-                });
-            }
-            else{
-              var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
-              d = new Date(0);
-              d.setUTCSeconds(utcTime);
-              originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
+        //- $.ajax({
+        //-   type: 'GET',
+        //-   url: fxml_url + 'AirlineFlightSchedules',
+        //-   data: {'startDate':sDate, 'endDate':eDate, 'airline':airlineCode, 'flightno':flightNum, 'howMany':1, 'offset':0},
+        //-   success: function(result) {
+        //-     console.log(result);
+        //-     //information stored in the result  
+        //-     //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
+        //-     //origin airport code
+        //-     if(result.AirlineFlightSchedulesResult.data.length == 0){
+        //-       $('#loadingRow').hide(200, function(){
+        //-           $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
+        //-         });
+        //-     }
+        //-     else{
+        //-       var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
+        //-       d = new Date(0);
+        //-       d.setUTCSeconds(utcTime);
+        //-       originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
 
-              directionsService.route({
-                origin: address,
-                destination: originAirport,
-                travelMode: modeTravel
-              }, function(response, status) {
-                if(status == "OK"){
-                  console.log('success, time incoming: ');
-                  //console.log(response);
-                  var time = response.routes[0].legs[0].duration.text;
-                  console.log(time);
-                  $('#loadingRow').hide(200, function(){
-                    $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+airport+' airport from '+address+'.');
-                  });
-                }
-                else {
-                  console.log('failure, response: '+response);
-                  $('#loadingRow').hide(200, function(){
-                    $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
-                  });
-                }
-              });
-            }
-          },
-            error: function(data, text){
-              $('#loadingRow').hide(200, function(){
-                  $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
-              });
-            },
-            dataType: 'jsonp',
-            jsonp: 'jsonp_callback',
-            xhrFields: {withCredentials: true}
-        });
+        //-       directionsService.route({
+        //-         origin: address,
+        //-         destination: originAirport,
+        //-         travelMode: modeTravel
+        //-       }, function(response, status) {
+        //-         if(status == "OK"){
+        //-           console.log('success, time incoming: ');
+        //-           //console.log(response);
+        //-           var time = response.routes[0].legs[0].duration.text;
+        //-           console.log(time);
+        //-           $('#loadingRow').hide(200, function(){
+        //-             $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
+        //-           });
+        //-         }
+        //-         else {
+        //-           console.log('failure, response: '+response);
+        //-           $('#loadingRow').hide(200, function(){
+        //-             $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
+        //-           });
+        //-         }
+        //-       });
+        //-     }
+        //-   },
+        //-     error: function(data, text){
+        //-       $('#loadingRow').hide(200, function(){
+        //-           $('#timeToAirport').css('color','white').text('There was a problem getting the flight information. Please try again.');
+        //-       });
+        //-     },
+        //-     dataType: 'jsonp',
+        //-     jsonp: 'jsonp_callback',
+        //-     xhrFields: {withCredentials: true}
+        //- });
 
         
       });
