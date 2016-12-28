@@ -31,6 +31,9 @@ block content
           option.custom-select(value="TRANSIT") taking public transportation
           option.custom-select(value="WALKING") walking
         span.more-options to the airport, I'm checking
+        div#mobileBags.nested-group
+          label(for="numberOfBags") # of bags
+          label(for="tsaPrecheck") TSA-PreCheck
         select.selectpicker.show-tick(id="bags", data-width="fit", data-style="color:white;background-color:transparent;margin-left:5px;margin-right:5px")
           option.custom-select(value="0") 0
           option.custom-select(value="1") 1
@@ -76,8 +79,8 @@ block content
         return d.valueOf()/1000;
       }
     }
-    
-    //input example is 'DL2011' 
+
+    //input example is 'DL2011'
     //Returns either the letters alone or numbers alone depending on w parameter
     function parseFlight(s, w) {
       if(w == 1){
@@ -123,7 +126,7 @@ block content
         //-   data: {'startDate':sDate, 'endDate':eDate, 'airline':airlineCode, 'flightno':flightNum, 'howMany':1, 'offset':0},
         //-   success: function(result) {
         //-     console.log(result);
-        //-     //information stored in the result  
+        //-     //information stored in the result
         //-     //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
         //-     //origin airport code
         //-     if(result.AirlineFlightSchedulesResult.data.length == 0){
@@ -172,7 +175,7 @@ block content
         $('#loadingRow').hide(200, function(){
           $('#timeToAirport').css('color','white').text('It will take approximately 24 minutes to get to SFO airport from 3145 Manchester Court, Palo Alto CA');
         });
-        
+
       });
     });
   script(async, defer, src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
