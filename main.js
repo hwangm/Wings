@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var request = require('request');
+var moment = require('moment-timezone');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -13,6 +14,7 @@ var app = express();
 
 //init moment for time support in jade
 app.locals.moment = require('moment');
+moment.tz.guess();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
