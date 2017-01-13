@@ -12,6 +12,9 @@ a {
 #mobileButton {
   display: none;
 }
+#mobileBags {
+  display: none;
+}
 /*
 * Styles for the Wings logo and intro text ("Quickly figure out what time to leave for the airport")
 */
@@ -226,6 +229,7 @@ img#loadingRow {
   }
   .nested-group label {
     color: #fff;
+    font-weight: bold;
   }
   .col-md-5,
   .col-md-2,
@@ -269,12 +273,54 @@ img#loadingRow {
   }
   #extraDetails > div > div:nth-child(2) > button {
     margin-bottom: 16px;
-    text-align: right !important;
+    text-align: left;
     font-size: 18px;
     border-bottom: 1px solid rgba(255,255,255,0.3) !important;
     padding-bottom: 13px;
   }
-  #extraDetails > div > div:nth-child(2) > button > span.filter-option.pull-left {
-    font-weight: 500;
+  #extraDetails > div > div > button > span.filter-option.pull-left {
+    font-weight: normal;
+  }
+  .nested-group label {
+    display: inline;
+  }
+  #mobileBags {
+    display: block;
+    margin: 0 15px;
+  }
+  #mobileBags > label:nth-child(1) {
+    display: inline-block;
+    margin-right: 5%;
+    width: 31.5% !important;
+    padding-right: 15px;
+  }
+  #extraDetails > div > div:nth-child(2) > button {
+    margin-bottom: 32px;
+  }
+  #extraDetails > div > div:nth-child(5) {
+    margin-left: 15px;
+    width: 30% !important;
+    border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+    padding-right: 15px;
+    padding-bottom: 6px;
+  }
+  #extraDetails > div > div:nth-child(5) > button {
+    font-size: 18px;
+    text-align: left;
+    font-weight: normal !important;
+    margin-top: 5px;
+  }
+  #extraDetails > div > div:nth-child(7) {
+    margin-left: 4%;
+    width: 59% !important;
+    border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+    overflow-x: hidden;
+    padding-bottom: 6px;
+  }
+  #extraDetails > div > div:nth-child(7) > button {
+    font-size: 18px;
+    text-align: left;
+    font-weight: normal !important;
+    margin-top: 5px;
   }
 }
