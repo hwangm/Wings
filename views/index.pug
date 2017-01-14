@@ -15,19 +15,15 @@ block content
                 b Multiple flights were found, please choose the correct flight
                 button.close(type="button", data-dismiss="modal", aria-label="close")
                   span(aria-hidden="true") &times;
-              div.modal-body#insertFlightChoicesHere
-                div.col-md-12
-                  table.table
-                    thead
-                      tr
-                        th Route
-                        th Departure Date
-                        th Departure Time
-                    tbody
-                      tr
-                        td SMF > PHX
-                        td 1/13/2016 
-                        td 1:30:00 PM PST
+              div.modal-body
+                div.row
+                  div.col-md-12
+                    table.table
+                      thead
+                        tr
+                          th Route
+                          th Departure Date/Time
+                      tbody#insertFlightChoicesHere
               div.modal-footer
                 button.btn.btn-default(type="button", data-dismiss="modal") Close
         div.form-group.nested-group(id="step1")
@@ -128,20 +124,21 @@ block content
         source: ["DL2011","DL3000","WN105","AK500"]
       });
       $('#calculateButton').click(function() {
+
+        //Step 1 show loading icon
         $('#loadingRow').removeClass('hidden');
         $('#loadingRow').show(200);
 
-
-        var sDate = parseDate($('#departureDate').val(), 's');
-        var eDate = parseDate($('#departureDate').val(), 'e');
+        //Step 2 retrieve all variables required to get data
+        var sDate = parseDate($('#departureDate').val(), 's'); //start date
+        var eDate = parseDate($('#departureDate').val(), 'e'); //end date
         console.log(sDate + ' ' + eDate);
-        var address = $('#location').val();
-        var flight = $('#flight').val();
+        var address = $('#location').val(); //start address
+        var flight = $('#flight').val(); //flight number
         if(flight == ""){
           flight = "UAL1892";
         }
-        var airlineCode = parseFlight(flight, 0);
-
+        var airlineCode = parseFlight(flight, 0); //break up flight number into airline code and number individually
         switch(airlineCode.toUpperCase()){ //converting common US IATA codes to ICAO 
           case "WN":
             airlineCode = "SWA";
@@ -154,6 +151,30 @@ block content
             break;
           case "UA":
             airlineCode = "UAL";
+            break;
+          case "AC":
+            airlineCode = "ACA";
+            break;
+          case "B6":
+            airlineCode = "JBU";
+            break;
+          case "WS":
+            airlineCode = "WJA";
+            break;
+          case "AM":
+            airlineCode = "AMX";
+            break;
+          case "NK":
+            airlineCode = "NKS";
+            break;
+          case "F9":
+            airlineCode = "FFT";
+            break;
+          case "HA":
+            airlineCode = "HAL";
+            break;
+          case "Y4":
+            airlineCode = "VOI";
             break;
           default:
             airlineCode = airlineCode.toUpperCase();
@@ -169,6 +190,7 @@ block content
         }
         console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre);
 
+
         // Comment out this section to avoid using the flightstats API, which costs $$$
         $.ajax({
           type: 'GET',
@@ -179,7 +201,9 @@ block content
             //information stored in the result
             //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
             //origin airport code
-            if(result.AirlineFlightSchedulesResult.data.length == 0){
+            var resultLength = result.AirlineFlightSchedulesResult.data.length;
+
+            if(resultLength == 0){
               $('#loadingRow').hide(200, function(){
                   $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
                 });
@@ -189,52 +213,33 @@ block content
               //For each flight:
               //- departure time (in local time based on user location)
               //- departure airport (and maybe arrival airport)
-              var numResults = result.AirlineFlightSchedulesResult.data.length;
-              var departureTimeArray =  []; //init new departure time array
-              var departureAirportArray = [];
-              var actualIdentifierArray = [];
-              var identifierArray = [];
+              //- var departureTimeArray =  []; //init new departure time array
+              //- var departureAirportArray = [];
+              //- var actualIdentifierArray = [];
+              //- var identifierArray = [];
 
-              for(var i=0;i<result.AirlineFlightSchedulesResult.data.length;i++){
-                var element = result.AirlineFlightSchedulesResult.data[i];
-                departureTimeArray.push(epochToLocalTime(element.departuretime));
-                departureAirportArray.push(element.origin);
-                identifierArray.push(element.ident); //actual_ident is only populated if ident is different (for codeshares)
-                actualIdentifierArray.push(element.actual_ident);
+              
+              if(resultLength > 1){
+                for(var i=0;i<resultLength;i++){
+                  var element = result.AirlineFlightSchedulesResult.data[i];
+                  //- departureTimeArray.push(epochToLocalTime(element.departuretime));
+                  //- departureAirportArray.push(element.origin);
+                  //- identifierArray.push(element.ident); //actual_ident is only populated if ident is different (for codeshares)
+                  //- actualIdentifierArray.push(element.actual_ident);
+                  if(element.actual_ident == ""){ //filter repeat flights from codeshares
+                    var row = "<tr><td>"+element.origin+" to "+element.destination+"</td><td>"+epochToLocalTime(element.departuretime)+"</td></tr>";
+                    $('#insertFlightChoicesHere').prepend(row);
+                  }
+                }
               }
-              console.log(departureTimeArray);
-              console.log(departureAirportArray);
-              console.log(identifierArray);
-              console.log(actualIdentifierArray);
-
-              var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
-              d = new Date(0);
-              d.setUTCSeconds(utcTime);
-              originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
-
-              directionsService.route({
-                origin: address,
-                destination: originAirport,
-                travelMode: modeTravel
-              }, function(response, status) {
-                if(status == "OK"){
-                  console.log('success, time incoming: ');
-                  //console.log(response);
-                  var time = response.routes[0].legs[0].duration.text;
-                  console.log(time);
-                  $('#loadingRow').hide(200, function(){
-                    $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
-                  });
-                }
-                else {
-                  console.log('failure, response: ');
-                  console.log(response);
-                  $('#loadingRow').hide(200, function(){
-                    $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
-                  });
-                }
-              });
-            }
+              else{
+                var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
+                d = new Date(0);
+                d.setUTCSeconds(utcTime);
+                var localTime = epochToLocalTime(utcTime);
+                originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
+              }
+            } 
           },
             error: function(data, text){
               $('#loadingRow').hide(200, function(){
@@ -252,5 +257,29 @@ block content
         //- });
 
       });
+      function calculateAddress(address, originAirport, modeTravel){
+        directionsService.route({
+          origin: address,
+          destination: originAirport,
+          travelMode: modeTravel
+        }, function(response, status) {
+          if(status == "OK"){
+            console.log('success, time incoming: ');
+            //console.log(response);
+            var time = response.routes[0].legs[0].duration.text;
+            console.log(time);
+            $('#loadingRow').hide(200, function(){
+              $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
+            });
+          }
+          else {
+            console.log('failure, response: ');
+            console.log(response);
+            $('#loadingRow').hide(200, function(){
+              $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
+            });
+          }
+        });
+      }    
     });
   script(async, defer, src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEMWXQEwFkceEBkA4gkl9jjeWCpEk-BeI&libraries=places&callback=initMap")
