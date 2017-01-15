@@ -116,12 +116,14 @@ block content
       return d.toLocaleString('en-US', options);
     }
 
+    //show the loading icon when calculating results
     function showLoadingIcon(){
       //Step 1 show loading icon
       $('#loadingRow').removeClass('hidden');
       $('#loadingRow').show(200);
     }
 
+    //given the number of bags to check, this function returns a string telling the user how much extra time to account for when checking bags
     function calculateBagTime(num){
       switch(num){
         case 0:
@@ -136,6 +138,29 @@ block content
         default:
           return 'You have no bags!';
       }
+    }
+
+    //given the AirlineFlightSchedulesResult from flightXML, this function determines if all the returned flights are codeshares for the same flight
+    function areFlightsAllSameCodeShares(data, length){
+      var actualIdentifierArray = [];
+      var result = true;
+
+      for(var i=0;i<length;i++ ){
+        if(data[i].actual_ident != ""){
+          actualIdentifierArray.push(data[i].actual_ident);
+        }
+      }
+      console.log(actualIdentifierArray);
+
+      for(var j=1;j<actualIdentifierArray.length;j++){
+        if(actualIdentifierArray[j] != actualIdentifierArray[0]){
+          console.log(actualIdentifierArray[j] + "compared to "+actualIdentifierArray[0] +" is not equal")
+          result = false;
+        }
+      }
+      console.log(result);
+      return result;
+
     }
 
     $(document).ready(function() {
@@ -220,6 +245,7 @@ block content
             //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
             //origin airport code
             var resultLength = result.AirlineFlightSchedulesResult.data.length;
+            var allCodeShares = areFlightsAllSameCodeShares(result.AirlineFlightSchedulesResult.data, resultLength);
 
             if(resultLength == 0){
               $('#loadingRow').hide(200, function(){
@@ -237,7 +263,7 @@ block content
               //- var identifierArray = [];
 
               
-              if(resultLength > 1){
+              if((resultLength > 1) && (allCodeShares == false)){
                 for(var i=0;i<resultLength;i++){
                   var element = result.AirlineFlightSchedulesResult.data[i];
                   //- departureTimeArray.push(epochToLocalTime(element.departuretime));
@@ -266,7 +292,7 @@ block content
                 departuretime = result.AirlineFlightSchedulesResult.data[0].departuretime;
                 localTime = epochToLocalTime(departuretime);
                 originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
-                $('#timeToAirport').css('color','white').text('One flight found departing from '+origin+' on '+epochToLocalTime(departuretime)+". ");
+                $('#timeToAirport').css('color','white').text('One flight found departing from '+originAirport+' on '+localTime+". ");
                 calculateAddress(address, originAirport.slice(1), modeTravel);
               }
             } 
