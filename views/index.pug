@@ -116,29 +116,47 @@ block content
       return d.toLocaleString('en-US', options);
     }
 
+    function showLoadingIcon(){
+      //Step 1 show loading icon
+      $('#loadingRow').removeClass('hidden');
+      $('#loadingRow').show(200);
+    }
+
+    function calculateBagTime(num){
+      switch(num){
+        case 0:
+          return 'You have no bags!';
+          break;
+        case 1:
+          return 'Checking in your one bag will take about 20 minutes';
+          break;
+        case '2+':
+          return 'Checking in your multiple bags will take about 25 minutes';
+          break;
+        default:
+          return 'You have no bags!';
+      }
+    }
+
     $(document).ready(function() {
       var fullDate = new Date();
       var currentDate = fullDate.getFullYear() + '-' + ("0" + (fullDate.getMonth()+1)).slice(-2) + '-' + ("0" + fullDate.getDate()).slice(-2);
       $('#departureDate').prop('value',currentDate);
-      $('#flight').autocomplete({
-        source: ["DL2011","DL3000","WN105","AK500"]
-      });
+
       $('#calculateButton').click(function() {
 
-        //Step 1 show loading icon
-        $('#loadingRow').removeClass('hidden');
-        $('#loadingRow').show(200);
+        showLoadingIcon();
 
         //Step 2 retrieve all variables required to get data
-        var sDate = parseDate($('#departureDate').val(), 's'); //start date
-        var eDate = parseDate($('#departureDate').val(), 'e'); //end date
+        sDate = parseDate($('#departureDate').val(), 's'); //start date
+        eDate = parseDate($('#departureDate').val(), 'e'); //end date
         console.log(sDate + ' ' + eDate);
-        var address = $('#location').val(); //start address
-        var flight = $('#flight').val(); //flight number
+        address = $('#location').val(); //start address
+        flight = $('#flight').val(); //flight number
         if(flight == ""){
           flight = "UAL1892";
         }
-        var airlineCode = parseFlight(flight, 0); //break up flight number into airline code and number individually
+        airlineCode = parseFlight(flight, 0); //break up flight number into airline code and number individually
         switch(airlineCode.toUpperCase()){ //converting common US IATA codes to ICAO 
           case "WN":
             airlineCode = "SWA";
@@ -179,13 +197,13 @@ block content
           default:
             airlineCode = airlineCode.toUpperCase();
         }
-        var flightNum = parseFlight(flight, 1);
+        flightNum = parseFlight(flight, 1);
         console.log(airlineCode +' '+flightNum);
-        var modeTravel = $('#modeTravel').val();
-        var bags = $('#bags').val();
-        var TSAPre = $('#hasTSAPre').val();
-        var airport = "SFO";
-        if(address == ""){
+        modeTravel = $('#modeTravel').val();
+        bags = $('#bags').val();
+        TSAPre = $('#hasTSAPre').val();
+        airport = "SFO";
+        if(address == ""){ //setting default address if nothing entered
           address = "3145 Manchester Court, Palo Alto, CA"
         }
         console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre);
@@ -206,7 +224,7 @@ block content
             if(resultLength == 0){
               $('#loadingRow').hide(200, function(){
                   $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
-                });
+              });
             }
             else{
               //Get data for a popup to ask user which flight is correct
@@ -227,17 +245,29 @@ block content
                   //- identifierArray.push(element.ident); //actual_ident is only populated if ident is different (for codeshares)
                   //- actualIdentifierArray.push(element.actual_ident);
                   if(element.actual_ident == ""){ //filter repeat flights from codeshares
-                    var row = "<tr><td>"+element.origin+" to "+element.destination+"</td><td>"+epochToLocalTime(element.departuretime)+"</td></tr>";
+                    var row = "<tr class='clickable-row' id='"+i+"' data-origin='"+element.origin+"' data-departuretime="+element.departuretime+"><td>"+element.origin+" to "+element.destination+"</td><td>"+epochToLocalTime(element.departuretime)+"</td></tr>";
                     $('#insertFlightChoicesHere').prepend(row);
                   }
+                  
                 }
+                $('#loadingRow').hide(200, function(){
+                    
+                    $('#chooseFlightModal').modal();
+                    $('.clickable-row').click(function(){
+                      departuretime = $(this).data('departuretime');
+                      origin = $(this).data('origin');
+                      $('#chooseFlightModal').modal('hide');
+                      $('#timeToAirport').css('color','white').text('You selected the flight departing from '+origin+' on '+epochToLocalTime(departuretime)+". ");
+                      calculateAddress(address, origin.slice(1), modeTravel);
+                    });
+                  }); 
               }
               else{
-                var utcTime = result.AirlineFlightSchedulesResult.data[0].departuretime;
-                d = new Date(0);
-                d.setUTCSeconds(utcTime);
-                var localTime = epochToLocalTime(utcTime);
+                departuretime = result.AirlineFlightSchedulesResult.data[0].departuretime;
+                localTime = epochToLocalTime(departuretime);
                 originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
+                $('#timeToAirport').css('color','white').text('One flight found departing from '+origin+' on '+epochToLocalTime(departuretime)+". ");
+                calculateAddress(address, originAirport.slice(1), modeTravel);
               }
             } 
           },
@@ -269,7 +299,7 @@ block content
             var time = response.routes[0].legs[0].duration.text;
             console.log(time);
             $('#loadingRow').hide(200, function(){
-              $('#timeToAirport').css('color','white').text('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
+              $('#timeToAirport').css('color','white').append('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
             });
           }
           else {

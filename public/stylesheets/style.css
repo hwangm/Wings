@@ -33,6 +33,13 @@ body > div.container > h3 {
   margin-top: 48px;
 }
 /*
+* Styles for the clickable modal rows if multiple flihghts are found
+*/
+.clickable-row:hover {
+  background-color: #ff0;
+  cursor: pointer;
+}
+/*
 * Styles for the input form ("Where are you coming from?" and "What is your flight number?")
 */
 .nested-group input:focus {
