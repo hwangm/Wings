@@ -47,7 +47,6 @@ function initMap(){
 
     //show the loading icon when calculating results
     function showLoadingIcon(){
-      //Step 1 show loading icon
       $('#loadingRow').removeClass('hidden');
       $('#loadingRow').show(200);
     }
@@ -69,24 +68,39 @@ function initMap(){
       }
     }
 
+    //this function clears the modal popup and time results of previous flight results if user searches more than one time in a session
+    function resetPage(){
+      $('#insertFlightChoicesHere').empty();
+      $('#timeToAirport').empty();
+    }
+
     //given the AirlineFlightSchedulesResult from flightXML, this function determines if all the returned flights are codeshares for the same flight
     function areFlightsAllSameCodeShares(data, length){
       var actualIdentifierArray = [];
+      var identifierArray = [];
       var result = true;
 
       for(var i=0;i<length;i++ ){
         if(data[i].actual_ident != ""){
-          actualIdentifierArray.push(data[i].actual_ident);
+          actualIdentifierArray.push(data[i].actual_ident); //collect flights with actual_ident populated 
+        }
+        if(data[i].actual_ident == ""){
+          identifierArray.push(data[i].ident); //find number of unique flights with no actual_ident code
         }
       }
       console.log(actualIdentifierArray);
+      console.log(identifierArray);
 
-      for(var j=1;j<actualIdentifierArray.length;j++){
-        if(actualIdentifierArray[j] != actualIdentifierArray[0]){
-          console.log(actualIdentifierArray[j] + "compared to "+actualIdentifierArray[0] +" is not equal")
-          result = false;
+      if(identifierArray.length == 1){ //which means there is only 1 unique flight and we may not need to show the modal
+        for(var j=1;j<actualIdentifierArray.length;j++){
+          if(actualIdentifierArray[j] != actualIdentifierArray[0]){
+            console.log(actualIdentifierArray[j] + "compared to "+actualIdentifierArray[0] +" is not equal")
+            result = false;
+          } 
         }
       }
+      else result = false;
+      
       console.log(result);
       return result;
 
@@ -98,7 +112,7 @@ function initMap(){
       $('#departureDate').prop('value',currentDate);
 
       $('#calculateButton').click(function() {
-
+        resetPage();
         showLoadingIcon();
 
         //Step 2 retrieve all variables required to get data
@@ -178,7 +192,7 @@ function initMap(){
 
             if(resultLength == 0){
               $('#loadingRow').hide(200, function(){
-                  $('#timeToAirport').css('color','white').text('No flights found with the flight number and date. Please try again.');
+                  $('#timeToAirport').text('No flights found with the flight number and date. Please try again.');
               });
             }
             else{
@@ -192,7 +206,7 @@ function initMap(){
               //- var identifierArray = [];
 
               
-              if((resultLength > 1) && (allCodeShares == false)){
+              if((resultLength > 1)){
                 for(var i=0;i<resultLength;i++){
                   var element = result.AirlineFlightSchedulesResult.data[i];
                   //- departureTimeArray.push(epochToLocalTime(element.departuretime));
@@ -200,7 +214,11 @@ function initMap(){
                   //- identifierArray.push(element.ident); //actual_ident is only populated if ident is different (for codeshares)
                   //- actualIdentifierArray.push(element.actual_ident);
                   if(element.actual_ident == ""){ //filter repeat flights from codeshares
-                    var row = "<tr class='clickable-row' id='"+i+"' data-origin='"+element.origin+"' data-departuretime="+element.departuretime+"><td>"+element.origin+" to "+element.destination+"</td><td>"+epochToLocalTime(element.departuretime)+"</td></tr>";
+                    var row = "<tr class='clickable-row' id='"+i+"' data-origin='"+element.origin+"' data-departuretime="+element.departuretime+"><td>"+element.ident+"</td><td>"+element.origin+" to "+element.destination+"</td><td>"+epochToLocalTime(element.departuretime)+"</td></tr>";
+                    $('#insertFlightChoicesHere').prepend(row);
+                  }
+                  else{
+                    var row = "<tr class='clickable-row' id='"+i+"' data-origin='"+element.origin+"' data-departuretime="+element.departuretime+"><td>"+element.ident+" (codeshare with "+element.actual_ident+")</td><td>"+element.origin+" to "+element.destination+"</td><td>"+epochToLocalTime(element.departuretime)+"</td></tr>";
                     $('#insertFlightChoicesHere').prepend(row);
                   }
                   
@@ -212,7 +230,7 @@ function initMap(){
                       departuretime = $(this).data('departuretime');
                       origin = $(this).data('origin');
                       $('#chooseFlightModal').modal('hide');
-                      $('#timeToAirport').css('color','white').text('You selected the flight departing from '+origin+' on '+epochToLocalTime(departuretime)+". ");
+                      $('#timeToAirport').text('You selected the flight departing from '+origin+' on '+epochToLocalTime(departuretime)+". ");
                       calculateAddress(address, origin.slice(1), modeTravel);
                     });
                   }); 
@@ -221,14 +239,14 @@ function initMap(){
                 departuretime = result.AirlineFlightSchedulesResult.data[0].departuretime;
                 localTime = epochToLocalTime(departuretime);
                 originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
-                $('#timeToAirport').css('color','white').text('One flight found departing from '+originAirport+' on '+localTime+". ");
+                $('#timeToAirport').text('One flight found departing from '+originAirport+' on '+localTime+". ");
                 calculateAddress(address, originAirport.slice(1), modeTravel);
               }
             } 
           },
             error: function(data, text){
               $('#loadingRow').hide(200, function(){
-                  $('#timeToAirport').css('color','white').text('There was a problem getting the flight information. Please try again.');
+                  $('#timeToAirport').text('There was a problem getting the flight information. Please try again.');
               });
             },
             dataType: 'jsonp',
@@ -254,14 +272,14 @@ function initMap(){
             var time = response.routes[0].legs[0].duration.text;
             console.log(time);
             $('#loadingRow').hide(200, function(){
-              $('#timeToAirport').css('color','white').append('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
+              $('#timeToAirport').append('It will take approximately '+time+' to get to '+originAirport+' airport from '+address+'.');
             });
           }
           else {
             console.log('failure, response: ');
             console.log(response);
             $('#loadingRow').hide(200, function(){
-              $('#timeToAirport').css('color','white').text('There was a problem getting directions to the origin airport. Please try again.');
+              $('#timeToAirport').text('There was a problem getting directions to the origin airport. Please try again.');
             });
           }
         });

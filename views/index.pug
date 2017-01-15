@@ -4,7 +4,7 @@ block content
   div.row#navHeader
     div.col-md-12 W I N G S
   h3 Quickly figure out when to leave for the airport.
-  button.btn.btn-primary(type="button", data-toggle="modal", data-target="#chooseFlightModal") Open modal
+  button.btn.btn-primary(class="hidden", type="button", data-toggle="modal", data-target="#chooseFlightModal") Open modal
   form(method="get", name="form1", id="form1")
     div.row#currentStepContainer
       div.col-md-12
@@ -21,6 +21,7 @@ block content
                     table.table
                       thead
                         tr
+                          th Flight Number
                           th Route
                           th Departure Date/Time
                       tbody#insertFlightChoicesHere

@@ -40,6 +40,12 @@ body > div.container > h3 {
   cursor: pointer;
 }
 /*
+* Styles for the time to airport div
+*/
+#timeToAirport {
+  color: #fff;
+}
+/*
 * Styles for the input form ("Where are you coming from?" and "What is your flight number?")
 */
 .nested-group input:focus {
