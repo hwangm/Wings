@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var request = require('request');
+var dotenv = require('dotenv').config();
+var restclient = require('restler');
+var fxml_url = "http://flightxml.flightaware.com/json/FlightXML2/AirlineFlightSchedules";
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -26,6 +29,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+//flightxml api request handler to hide the api key
+app.get('/api/flightxml', function(req, res){
+    restclient.get(fxml_url, {
+        username: "hwangm",
+        password: process.env.FLIGHTXML_API_KEY,
+        query: {
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+            airline: req.query.airline,
+            flightno: req.query.flightno,
+            howMany: req.query.howMany,
+            offset: req.query.offset
+        }
+    }).on('success', function(result, response){
+        res.json(result);
+    });
+    
+})
 
 app.use('/', routes);
 app.use('/users', users);
@@ -60,6 +82,7 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
+
 
 
 module.exports = app;
