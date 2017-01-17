@@ -45,6 +45,8 @@ app.get('/api/flightxml', function(req, res){
         }
     }).on('success', function(result, response){
         res.json(result);
+    }).on('error', function(result, response){
+        res.json(result);
     });
     
 })
