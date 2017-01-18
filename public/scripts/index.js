@@ -104,7 +104,15 @@ function areFlightsAllSameCodeShares(data, length) {
 
 }
 
+function inputFieldsAreNotEmpty(){
+  return ($('#location').val() != "") && ($('#flight').val() != "") && ($('#departureDate').val() != "");
+}
+
 function calculateTime() {
+  console.log(inputFieldsAreNotEmpty());
+  if(!inputFieldsAreNotEmpty()){
+    return;
+  }
   resetPage();
   showLoadingIcon();
 
@@ -120,6 +128,9 @@ function calculateTime() {
   airlineCode = parseFlight(flight, 0); //break up flight number into airline code and number individually
   switch (airlineCode.toUpperCase()) { //converting common US IATA codes to ICAO 
     case "WN":
+      airlineCode = "SWA";
+      break;
+    case "SW":
       airlineCode = "SWA";
       break;
     case "DL":
@@ -283,4 +294,7 @@ $(document).ready(function () {
     calculateTime();
   });
 
+  $('#form1').submit(function(){
+    return false;
+  })
 });

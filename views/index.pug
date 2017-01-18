@@ -30,15 +30,15 @@ block content
         div.form-group.nested-group(id="step1")
           div#locationWrapper.col-md-5
             label(for="location") Where are you coming from?
-            input.form-control.input-lg(type="text", name="startlocation", id="location", placeholder="1234 Sesame St, Madison, WI 53719")
+            input.form-control.input-lg(type="text", name="startlocation", id="location", placeholder="1234 Sesame St, Madison, WI 53719", required)
           div#flightWrapper.col-md-2
             label(for="flight") Flight number
-            input.form-control.input-lg(type="text", name="flight", id="flight", placeholder="DL2011")
+            input.form-control.input-lg(type="text", name="flight", id="flight", placeholder="DL2011", required)
           div#dateWrapper.col-md-3
             label(for="date") Departure date
-            input.form-control.input-lg(type="text", name="departureDate", id="departureDate")
+            input.form-control.input-lg(type="text", name="departureDate", id="departureDate", required)
           div.inline-button.col-md-2
-            button.btn.btn-primary.pull-right(type="button", id="calculateButton") Calculate
+            button.btn.btn-primary.pull-right(type="submit", id="calculateButton") Calculate
     div.row#mobileGettingToAirport
       div.col-md-12.nested-group
         label(for="transportation") How are you getting to the airport?
