@@ -6,8 +6,12 @@
 *.user
 *.sln.docstates
 
-#dotenv file
+# dotenv file
 *.env
+
+# VSCode folder
+.vscode/
+.vscode/*
 
 # Elastic Beanstalk Files
 
