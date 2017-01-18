@@ -4,13 +4,14 @@ function initMap() {
   directionsService = new google.maps.DirectionsService;
 }
 
-// s is format y-m-d
+// s is format yyyy-mm-dd
 // Returns the Unix time for a given date. Specify "s" to get start date (at midnight by default), or 'e' for end date at 2359.
 function parseDate(s, startOrEnd) {
   var b = s.split('-');
   var cDate = new Date(); //get today's date to compare against start date
   if (startOrEnd == 's') { //get Start Date. 
     var d = new Date(b[0], --b[1], b[2], 0, 0, 0);
+    console.log(d);
     if (cDate.toDateString() == d.toDateString()) { //If date is today, then use current timestamp. Otherwise, default to midnight.
       return Math.floor(cDate.valueOf() / 1000);
     }
@@ -108,8 +109,8 @@ function calculateTime() {
   showLoadingIcon();
 
   //Step 2 retrieve all variables required to get data
-  sDate = parseDate($('#departureDate').val(), 's'); //start date
-  eDate = parseDate($('#departureDate').val(), 'e'); //end date
+  sDate = parseDate(picker.toString('YYYY-MM-DD'), 's'); //start date
+  eDate = parseDate(picker.toString('YYYY-MM-DD'), 'e'); //end date
   console.log(sDate + ' ' + eDate);
   address = $('#location').val(); //start address
   flight = $('#flight').val(); //flight number
@@ -267,9 +268,13 @@ function calculateAddress(address, originAirport, modeTravel) {
 }
 
 $(document).ready(function () {
-  var fullDate = new Date();
-  var currentDate = fullDate.getFullYear() + '-' + ("0" + (fullDate.getMonth() + 1)).slice(-2) + '-' + ("0" + fullDate.getDate()).slice(-2);
-  $('#departureDate').prop('value', currentDate);
+  picker = new Pikaday({ //initializes datepicker that works universally cross-browser. HTML5 Date input only works in Chrome and Opera
+    field: document.getElementById('departureDate'),
+    format: 'MM/DD/YYYY',
+    minDate: moment().toDate(), 
+    maxDate: moment().add(2,'w').toDate()
+  });
+  picker.setDate(moment().format('YYYY-MM-DD'));
 
   $('#calculateButton').click(function () {
     calculateTime();
