@@ -72,6 +72,13 @@ function resetPage() {
   $('#timeToAirport').empty();
   $('#timeToLeave').empty();
   $('#flightInformation').empty();
+  $('#flightInformationDetails').empty();
+  $('#timeToAirportDetails').empty();
+  $('#arriveAtGate').empty();
+  $('#arriveAtGateDetails').empty();
+  $('#timeToAirportWrapper').hide();
+  $('#arriveAtGateWrapper').hide();
+  $('#flightInformationWrapper').hide();
 }
 
 //given the AirlineFlightSchedulesResult from flightXML, this function determines if all the returned flights are codeshares for the same flight
@@ -225,7 +232,7 @@ function calculateTime() {
               departuretime = $(this).data('departuretime');
               origin = $(this).data('origin');
               $('#chooseFlightModal').modal('hide');
-              $('#flightInformation').text('You selected the flight departing from ' + origin + ' on ' + epochToLocalTime(departuretime) + ". ");
+              $('#flightInformation').text('Arrive at ' + origin.slice(1) + '.');
               calculateAddress(address, origin.slice(1), modeTravel);
             });
           });
@@ -250,27 +257,38 @@ function calculateTime() {
   });
 }
 
-function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre){
+function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre, airport){
   console.log(epochToLocalTime(departuretime));
   var timezone = epochToLocalTime(departuretime).slice(-3);
   timeToLeave = moment(epochToLocalTime(departuretime).slice(0, -4), 'M-DD-YYYY h:mm:ss A').subtract(60, 'm'); //use local time but remove the timezone. boarding time is departuretime - 60 minutes
   console.log('boardingtime' + timeToLeave.format('h:mm A'));
+  $('#arriveAtGate').prepend('<b>' + timeToLeave.format('h:mm A') + '</b> Arrive at your gate.');
+  $('#arriveAtGateDetails').text('You will have 30 minutes to spare before boarding your flight.');
+  var bagsAndSecurityTime = 0;
   if(bags >= 1){
     timeToLeave = timeToLeave.subtract(20, 'm'); //add 20 minutes for bag check
-    
+    bagsAndSecurityTime = bagsAndSecurityTime + 20;
   }
   console.log('bags' + timeToLeave.format('h:mm A'));
   if(tsaPre == 1){
     timeToLeave = timeToLeave.subtract(15, 'm'); //add 15 minutes if you have TSA Pre
+    bagsAndSecurityTime = bagsAndSecurityTime + 15;
   }
   else{
     timeToLeave = timeToLeave.subtract(45, 'm'); //add 45 minutes if you do not have TSA Pre
+    bagsAndSecurityTime = bagsAndSecurityTime + 45;
   }
   console.log('tsaPre' + timeToLeave.format('h:mm A'));
+  $('#flightInformation').prepend('<b>' + timeToLeave.format('h:mm A ') + '</b>');
+  $('#flightInformationDetails').append('Check-in and security take on average ' + bagsAndSecurityTime + ' minutes at ' + airport + '.');
   timeToLeave = timeToLeave.subtract(traveltime, 's'); //add the travel time in seconds, calculated by google maps
   console.log('travelTime' + timeToLeave.format('h:mm A'));
 
   $('#timeToLeave').text('You should leave for the airport by ' + timeToLeave.format('h:mm A ') + timezone +'.');
+  $('#flightInformationWrapper').show(200);
+  $('#timeToAirportWrapper').show(200);
+  $('#arriveAtGateWrapper').show(200);
+  $('#timeToAirport').prepend('<b>' + timeToLeave.format('h:mm A ') + '</b>');
 }
 
 function calculateAddress(address, originAirport, modeTravel) {
@@ -287,8 +305,9 @@ function calculateAddress(address, originAirport, modeTravel) {
       
       //console.log(time);
       $('#loadingRow').hide(200, function () {
-        $('#timeToAirport').append('It will take approximately ' + time + ' to get to ' + originAirport + ' airport from ' + address + '.');
-        calculateTimeToLeave(departuretime, value, bags, TSAPre);
+        $('#timeToAirport').append('Leave ' + address);
+        $('#timeToAirportDetails').append('It takes approximately ' + time + ' to get to ' + originAirport + '.');
+        calculateTimeToLeave(departuretime, value, bags, TSAPre, originAirport);
       });
     }
     else {

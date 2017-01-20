@@ -68,10 +68,21 @@ block content
     div.row
       img#loadingRow.hidden(src="/images/rolling.gif", alt="loading image")
     div.row#results
-      div.col-md-12
+      div.col-md-12#timeToLeaveWrapper
         h3#timeToLeave
-      div.col-md-12#flightInformation
-      div.col-md-12#timeToAirport
+      div.col-md-12#timeToAirportWrapper(style="display:none")
+        span.glyphicon.glyphicon-record
+        span#timeToAirport
+        div#timeToAirportDetails.results-line
+      div.col-md-12#flightInformationWrapper(style="display:none")
+        span.glyphicon.glyphicon-record
+        span#flightInformation
+        div#flightInformationDetails.results-line
+      div.col-md-12#arriveAtGateWrapper(style="display:none")
+        span.glyphicon.glyphicon-record
+        span#arriveAtGate
+        div#arriveAtGateDetails.results-noline
+
   script(src="/plugins/moment.js", type="text/javascript")  
   script(src="/plugins/pikaday.js", type="text/javascript")
   script(src="/scripts/index.js", type="text/javascript")

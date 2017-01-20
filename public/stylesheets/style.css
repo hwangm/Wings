@@ -45,8 +45,25 @@ body > div.container > h3,
 */
 #timeToAirport,
 #timeToLeave,
-#flightInformation {
+#flightInformation,
+#arriveAtGate {
   color: #fff;
+}
+.results-line,
+.results-noline {
+  height: 50px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  padding-left: 12px;
+  color: #8b8f98;
+  margin-top: 5px;
+}
+.results-line {
+  border-left: 2px solid #fff;
+}
+.glyphicon-record {
+  color: #fff;
+  margin-right: 5px;
 }
 /*
 * Styles for the input form ("Where are you coming from?" and "What is your flight number?")
