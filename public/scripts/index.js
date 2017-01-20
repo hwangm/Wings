@@ -252,6 +252,7 @@ function calculateTime() {
 
 function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre){
   console.log(epochToLocalTime(departuretime));
+  var timezone = epochToLocalTime(departuretime).slice(-3);
   timeToLeave = moment(epochToLocalTime(departuretime).slice(0, -4), 'M-DD-YYYY h:mm:ss A').subtract(60, 'm'); //use local time but remove the timezone. boarding time is departuretime - 60 minutes
   console.log('boardingtime' + timeToLeave.format('h:mm A'));
   if(bags >= 1){
@@ -269,7 +270,7 @@ function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre){
   timeToLeave = timeToLeave.subtract(traveltime, 's'); //add the travel time in seconds, calculated by google maps
   console.log('travelTime' + timeToLeave.format('h:mm A'));
 
-  $('#timeToLeave').text('Accounting for bag check, TSA Precheck, and travel time, you should leave by ' + timeToLeave.format('h:mm A') + ' to board on time.');
+  $('#timeToLeave').text('You should leave for the airport by ' + timeToLeave.format('h:mm A ') + timezone +'.');
 }
 
 function calculateAddress(address, originAirport, modeTravel) {
