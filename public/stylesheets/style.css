@@ -42,7 +42,9 @@ body > div.container > h3 {
 /*
 * Styles for the time to airport div
 */
-#timeToAirport {
+#timeToAirport,
+#timeToLeave,
+#flightInformation {
   color: #fff;
 }
 /*

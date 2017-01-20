@@ -70,6 +70,8 @@ function calculateBagTime(num) {
 function resetPage() {
   $('#insertFlightChoicesHere').empty();
   $('#timeToAirport').empty();
+  $('#timeToLeave').empty();
+  $('#flightInformation').empty();
 }
 
 //given the AirlineFlightSchedulesResult from flightXML, this function determines if all the returned flights are codeshares for the same flight
@@ -86,20 +88,20 @@ function areFlightsAllSameCodeShares(data, length) {
       identifierArray.push(data[i].ident); //find number of unique flights with no actual_ident code
     }
   }
-  console.log(actualIdentifierArray);
-  console.log(identifierArray);
+  // console.log(actualIdentifierArray);
+  // console.log(identifierArray);
 
   if (identifierArray.length == 1) { //which means there is only 1 unique flight and we may not need to show the modal
     for (var j = 1; j < actualIdentifierArray.length; j++) {
       if (actualIdentifierArray[j] != actualIdentifierArray[0]) {
-        console.log(actualIdentifierArray[j] + "compared to " + actualIdentifierArray[0] + " is not equal")
+        //console.log(actualIdentifierArray[j] + "compared to " + actualIdentifierArray[0] + " is not equal")
         result = false;
       }
     }
   }
   else result = false;
 
-  console.log(result);
+  //console.log(result);
   return result;
 
 }
@@ -109,7 +111,6 @@ function inputFieldsAreNotEmpty(){
 }
 
 function calculateTime() {
-  console.log(inputFieldsAreNotEmpty());
   if(!inputFieldsAreNotEmpty()){
     return;
   }
@@ -119,7 +120,7 @@ function calculateTime() {
   //Step 2 retrieve all variables required to get data
   sDate = parseDate(picker.toString('YYYY-MM-DD'), 's'); //start date
   eDate = parseDate(picker.toString('YYYY-MM-DD'), 'e'); //end date
-  console.log(sDate + ' ' + eDate);
+  //console.log(sDate + ' ' + eDate);
   address = $('#location').val(); //start address
   flight = $('#flight').val(); //flight number
   if (flight == "") {
@@ -170,27 +171,24 @@ function calculateTime() {
       airlineCode = airlineCode.toUpperCase();
   }
   flightNum = parseFlight(flight, 1);
-  console.log(airlineCode + ' ' + flightNum);
+  //console.log(airlineCode + ' ' + flightNum);
   modeTravel = $('#modeTravel').val();
   bags = $('#bags').val();
   TSAPre = $('#hasTSAPre').val();
-  airport = "SFO";
-  if (address == "") { //setting default address if nothing entered
-    address = "3145 Manchester Court, Palo Alto, CA"
-  }
-  console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre);
+
+  //console.log(address + " " + flight + " " + modeTravel + " " + bags + " " + TSAPre);
 
   $.ajax({
     type: 'GET',
     url: '/api/flightxml',
     data: { 'startDate': sDate, 'endDate': eDate, 'airline': airlineCode, 'flightno': flightNum, 'howMany': 5, 'offset': 0 },
     success: function (result) {
-      console.log(result);
+      //console.log(result);
       //information stored in the result
       //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
       //origin airport code
       var resultLength = result.AirlineFlightSchedulesResult.data.length;
-      var allCodeShares = areFlightsAllSameCodeShares(result.AirlineFlightSchedulesResult.data, resultLength);
+      //var allCodeShares = areFlightsAllSameCodeShares(result.AirlineFlightSchedulesResult.data, resultLength);
 
       if (resultLength == 0) {
         $('#loadingRow').hide(200, function () {
@@ -227,7 +225,7 @@ function calculateTime() {
               departuretime = $(this).data('departuretime');
               origin = $(this).data('origin');
               $('#chooseFlightModal').modal('hide');
-              $('#timeToAirport').text('You selected the flight departing from ' + origin + ' on ' + epochToLocalTime(departuretime) + ". ");
+              $('#flightInformation').text('You selected the flight departing from ' + origin + ' on ' + epochToLocalTime(departuretime) + ". ");
               calculateAddress(address, origin.slice(1), modeTravel);
             });
           });
@@ -236,14 +234,14 @@ function calculateTime() {
           departuretime = result.AirlineFlightSchedulesResult.data[0].departuretime;
           localTime = epochToLocalTime(departuretime);
           originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
-          $('#timeToAirport').text('One flight found departing from ' + originAirport + ' on ' + localTime + ". ");
+          $('#flightInformation').text('One flight found departing from ' + originAirport + ' on ' + localTime + ". ");
           calculateAddress(address, originAirport.slice(1), modeTravel);
         }
       }
     },
     error: function (data, text) {
       $('#loadingRow').hide(200, function () {
-        $('#timeToAirport').text('There was a problem getting the flight information. Please try again.');
+        $('#flightInformation').text('There was a problem getting the flight information. Please try again.');
       });
     },
     dataType: 'json',
@@ -252,6 +250,27 @@ function calculateTime() {
   });
 }
 
+function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre){
+  console.log(epochToLocalTime(departuretime));
+  timeToLeave = moment(epochToLocalTime(departuretime).slice(0, -4), 'M-DD-YYYY h:mm:ss A').subtract(60, 'm'); //use local time but remove the timezone. boarding time is departuretime - 60 minutes
+  console.log('boardingtime' + timeToLeave.format('h:mm A'));
+  if(bags >= 1){
+    timeToLeave = timeToLeave.subtract(20, 'm'); //add 20 minutes for bag check
+    
+  }
+  console.log('bags' + timeToLeave.format('h:mm A'));
+  if(tsaPre == 1){
+    timeToLeave = timeToLeave.subtract(15, 'm'); //add 15 minutes if you have TSA Pre
+  }
+  else{
+    timeToLeave = timeToLeave.subtract(45, 'm'); //add 45 minutes if you do not have TSA Pre
+  }
+  console.log('tsaPre' + timeToLeave.format('h:mm A'));
+  timeToLeave = timeToLeave.subtract(traveltime, 's'); //add the travel time in seconds, calculated by google maps
+  console.log('travelTime' + timeToLeave.format('h:mm A'));
+
+  $('#timeToLeave').text('Accounting for bag check, TSA Precheck, and travel time, you should leave by ' + timeToLeave.format('h:mm A') + ' to board on time.');
+}
 
 function calculateAddress(address, originAirport, modeTravel) {
   directionsService.route({
@@ -260,17 +279,20 @@ function calculateAddress(address, originAirport, modeTravel) {
     travelMode: modeTravel
   }, function (response, status) {
     if (status == "OK") {
-      console.log('success, time incoming: ');
-      //console.log(response);
-      var time = response.routes[0].legs[0].duration.text;
-      console.log(time);
+      //console.log('success, time incoming: ');
+      console.log(response);
+      var time = response.routes[0].legs[0].duration.text; 
+      value = response.routes[0].legs[0].duration.value; //response.routes.legs.duration.value is the duration in seconds
+      
+      //console.log(time);
       $('#loadingRow').hide(200, function () {
         $('#timeToAirport').append('It will take approximately ' + time + ' to get to ' + originAirport + ' airport from ' + address + '.');
+        calculateTimeToLeave(departuretime, value, bags, TSAPre);
       });
     }
     else {
-      console.log('failure, response: ');
-      console.log(response);
+      //console.log('failure, response: ');
+      //console.log(response);
       $('#loadingRow').hide(200, function () {
         $('#timeToAirport').text('There was a problem getting directions to the origin airport. Please try again.');
       });
