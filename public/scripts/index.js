@@ -9,7 +9,7 @@ function initMap() {
 function parseDate(s, startOrEnd) {
   var b = s.split('-');
   var cDate = new Date(); //get today's date to compare against start date
-  if (startOrEnd == 's') { //get Start Date. 
+  if (startOrEnd == 's') { //get Start Date.
     var d = new Date(b[0], --b[1], b[2], 0, 0, 0);
     console.log(d);
     if (cDate.toDateString() == d.toDateString()) { //If date is today, then use current timestamp. Otherwise, default to midnight.
@@ -36,7 +36,7 @@ function parseFlight(s, w) {
   }
 }
 
-//given an epoch time, this function returns the local time in a human readable format 
+//given an epoch time, this function returns the local time in a human readable format
 function epochToLocalTime(t) {
   var d = new Date(t * 1000);
   var options = { timeZoneName: "short" }
@@ -89,7 +89,7 @@ function areFlightsAllSameCodeShares(data, length) {
 
   for (var i = 0; i < length; i++) {
     if (data[i].actual_ident != "") {
-      actualIdentifierArray.push(data[i].actual_ident); //collect flights with actual_ident populated 
+      actualIdentifierArray.push(data[i].actual_ident); //collect flights with actual_ident populated
     }
     if (data[i].actual_ident == "") {
       identifierArray.push(data[i].ident); //find number of unique flights with no actual_ident code
@@ -134,7 +134,7 @@ function calculateTime() {
     flight = "UAL1892";
   }
   airlineCode = parseFlight(flight, 0); //break up flight number into airline code and number individually
-  switch (airlineCode.toUpperCase()) { //converting common US IATA codes to ICAO 
+  switch (airlineCode.toUpperCase()) { //converting common US IATA codes to ICAO
     case "WN":
       airlineCode = "SWA";
       break;
@@ -300,9 +300,9 @@ function calculateAddress(address, originAirport, modeTravel) {
     if (status == "OK") {
       //console.log('success, time incoming: ');
       console.log(response);
-      var time = response.routes[0].legs[0].duration.text; 
+      var time = response.routes[0].legs[0].duration.text;
       value = response.routes[0].legs[0].duration.value; //response.routes.legs.duration.value is the duration in seconds
-      
+
       //console.log(time);
       $('#loadingRow').hide(200, function () {
         $('#timeToAirport').append('Leave ' + address);
@@ -324,16 +324,32 @@ $(document).ready(function () {
   picker = new Pikaday({ //initializes datepicker that works universally cross-browser. HTML5 Date input only works in Chrome and Opera
     field: document.getElementById('departureDate'),
     format: 'MM/DD/YYYY',
-    minDate: moment().toDate(), 
+    minDate: moment().toDate(),
     maxDate: moment().add(2,'w').toDate()
   });
   picker.setDate(moment().format('YYYY-MM-DD'));
 
   $('#calculateButton').click(function () {
     calculateTime();
+    $('#purpose').hide("slow");
+    $('.nested-group input').css({
+      "background-color":"rgba(255,255,255,0)",
+      "color":"white"
+    });
+    $('.nested-group div').css({
+      "background-color":"rgba(255,255,255,0)",
+      "border":"1px solid rgba(255,255,255,.25)",
+      "border-right":"none"
+    });
+    $('.nested-group label').css("color","rgba(255,255,255,.5)");
+    $('.nested-group .inline-button').css({
+      "border-left":"none",
+      "border-right":"1px solid rgba(255,255,255,.25)"
+    });
   });
   $('#mobileCalculateButton').click(function () {
     calculateTime();
+    $('#purpose').hide("slow");
   });
 
   $('#form1').submit(function(){
