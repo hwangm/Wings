@@ -9,7 +9,10 @@ body {
 a {
   color: #00b7ff;
 }
-#mobileButton, #mobileBags, #mobileGettingToAirport, #showMoreOptions {
+#mobileButton,
+#mobileBags,
+#mobileGettingToAirport,
+#showMoreOptions {
   display: none;
 }
 /*
@@ -39,12 +42,9 @@ body > div.container > h3,
   cursor: pointer;
 }
 /*
-* Styles for the time to airport div
+* Styles for the results row
 */
-#timeToAirport,
-#timeToLeave,
-#flightInformation,
-#arriveAtGate {
+#results {
   color: #fff;
 }
 .results-line,
@@ -282,6 +282,14 @@ img#loadingRow {
   .inline-button {
     display: none !important;
   }
+  #showMoreOptions {
+    display: block;
+    text-align: center;
+  }
+  #showMoreOptions a {
+    color: #fff;
+    font-weight: bold;
+  }
   #mobileButton {
     display: block;
     margin-top: 24px;
@@ -289,17 +297,6 @@ img#loadingRow {
   #mobileButton button {
     border: none !important;
     width: 100%;
-  }
-  #showMoreOptions {
-    display: block;
-    text-align: center;;
-    font-weight: bold;
-  }
-  #showMoreOptions a {
-    color: #ffffff;
-  }
-  #mobileGettingToAirport {
-    display: none;
   }
   #extraDetails {
     display: none;
