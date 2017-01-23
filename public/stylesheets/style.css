@@ -9,10 +9,7 @@ body {
 a {
   color: #00b7ff;
 }
-#mobileButton {
-  display: none;
-}
-#mobileBags {
+#mobileButton, #mobileBags, #mobileGettingToAirport, #showMoreOptions {
   display: none;
 }
 /*
@@ -293,8 +290,19 @@ img#loadingRow {
     border: none !important;
     width: 100%;
   }
-  #mobileGettingToAirport {
+  #showMoreOptions {
     display: block;
+    text-align: center;;
+    font-weight: bold;
+  }
+  #showMoreOptions a {
+    color: #ffffff;
+  }
+  #mobileGettingToAirport {
+    display: none;
+  }
+  #extraDetails {
+    display: none;
   }
   #extraDetails > div {
     padding: 0;

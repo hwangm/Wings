@@ -347,10 +347,17 @@ $(document).ready(function () {
       "border-right":"1px solid rgba(255,255,255,.25)"
     });
   });
+
   $('#mobileCalculateButton').click(function () {
     calculateTime();
     $('#purpose').hide("slow");
   });
+
+  $('#showMoreOptions').click(function () {
+    $('#mobileGettingToAirport').css("display", "block");
+    $('#extraDetails').css("display","block");
+    $(this).css("display","none");
+  })
 
   $('#form1').submit(function(){
     return false;
