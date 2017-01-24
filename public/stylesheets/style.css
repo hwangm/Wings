@@ -41,10 +41,22 @@ body > div.container > h3,
   background-color: #ff0;
   cursor: pointer;
 }
+#map-panel {
+  width: 60%;
+  height: 400px;
+  display: inline-block;
+}
+#right-panel {
+  width: 40%;
+  height: 400px;
+  float: right;
+  display: inline-block;
+  overflow: auto;
+}
 /*
 * Styles for the results row
 */
-#results {
+.results {
   color: #fff;
 }
 .results-line,

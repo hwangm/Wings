@@ -80,6 +80,7 @@ function resetPage() {
   $('#arriveAtGateWrapper').hide();
   $('#flightInformationWrapper').hide();
   $('#errorWrapper').empty();
+  $('#map').hide();
 }
 
 //given the AirlineFlightSchedulesResult from flightXML, this function determines if all the returned flights are codeshares for the same flight
@@ -97,7 +98,6 @@ function areFlightsAllSameCodeShares(data, length) {
       }
     }
   }
-``
   //console.log(result);
   return result;
 
@@ -281,6 +281,18 @@ function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre, airport){
   $('#timeToAirport').prepend('<b>' + timeToLeave.format('h:mm A ') + '</b>');
 }
 
+//input: DirectionsResult d (from google directions service query)
+function plotDirections(d){
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  map = new google.maps.Map(document.getElementById('map-panel'), {
+    zoom: 4
+  });
+  directionsDisplay.setMap(map);
+  directionsDisplay.setDirections(d);
+  directionsDisplay.setPanel(document.getElementById('right-panel'));
+  $('#right-panel').css('background-color', 'white');
+}
+
 function calculateAddress(address, originAirport, modeTravel) {
   directionsService.route({
     origin: address,
@@ -296,7 +308,13 @@ function calculateAddress(address, originAirport, modeTravel) {
       //console.log(time);
       $('#loadingRow').hide(200, function () {
         $('#timeToAirport').append('Leave ' + address);
-        $('#timeToAirportDetails').append('It takes approximately ' + time + ' to get to ' + originAirport + '.');
+        $('#timeToAirportDetails').append('It takes approximately ' + time + ' to get to ' + originAirport + '. <a id="openMapLink" href="#">View Directions</a>');
+        $('#openMapLink').on('click', function() {
+          $('#map').toggle();
+          if($('#right-panel').children().length == 0){
+            plotDirections(response);
+          }
+        });
         calculateTimeToLeave(departuretime, value, bags, TSAPre, originAirport);
       });
     }
