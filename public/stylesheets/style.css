@@ -376,3 +376,18 @@ img#loadingRow {
     margin-top: 5px;
   }
 }
+/*
+* Footer
+*/
+.footer {
+  position: absolute;
+  bottom: 0;
+  height: 60px;
+}
+.footer a {
+  margin: auto 5px auto 5px;
+}
+.footer .col-md-12 {
+  text-align: center;
+  color: #fff;
+}
