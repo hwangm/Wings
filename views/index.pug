@@ -33,7 +33,7 @@ block content
             input.form-control.input-lg(type="text", name="startlocation", id="location", placeholder="1234 Sesame St, Madison, WI 53719", required)
           div#flightWrapper.col-md-2
             label(for="flight") Flight number
-            input.form-control.input-lg(type="text", name="flight", id="flight", placeholder="DL2011", required)
+            input.form-control.input-lg(type="text", name="flight", id="flight", placeholder="DL2011", autocomplete="off", required)
           div#dateWrapper.col-md-3
             label(for="date") Departure date
             input.form-control.input-lg(type="text", name="departureDate", id="departureDate", required)
@@ -74,7 +74,7 @@ block content
     div.col-md-12#timeToLeaveWrapper
       h3#timeToLeave
   div.row.results
-    div.col-md-5
+    div.col-md-5#finalResults
       div.row
         div.col-md-12#timeToAirportWrapper(style="display:none")
           span.glyphicon.glyphicon-record

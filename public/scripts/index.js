@@ -329,6 +329,9 @@ function calculateAddress(address, originAirport, modeTravel) {
 }
 
 function styleDesktopSearch () {
+  if(!inputFieldsAreNotEmpty()){
+    return;
+  }
   $('#purpose').hide("slow");
   $('.nested-group input').css({
     "background-color":"rgba(255,255,255,0)",
@@ -344,6 +347,17 @@ function styleDesktopSearch () {
     "border-left":"none",
     "border-right":"1px solid rgba(255,255,255,.25)"
   });
+}
+
+function styleMobileSearch () {
+  if(!inputFieldsAreNotEmpty()){
+    return;
+  }
+  $('#purpose').hide("slow");
+  $('#currentStepContainer').hide("slow");
+  $('#showMoreOptions').hide("slow");
+  $('#extraDetails').hide("slow");
+  $('#mobileCalculateButton').hide("slow");
 }
 
 $(document).ready(function () {
@@ -362,7 +376,7 @@ $(document).ready(function () {
 
   $('#mobileCalculateButton').click(function () {
     calculateTime();
-    $('#purpose').hide("slow");
+    styleMobileSearch();
   });
 
   $('#showMoreOptions').click(function () {
