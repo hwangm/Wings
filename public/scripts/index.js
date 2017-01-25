@@ -357,6 +357,7 @@ function styleMobileSearch () {
   $('#currentStepContainer').hide("slow");
   $('#showMoreOptions').hide("slow");
   $('#extraDetails').hide("slow");
+  $('#mobileGettingToAirport').hide("slow");
   $('#mobileCalculateButton').hide("slow");
 }
 
