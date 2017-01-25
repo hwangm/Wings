@@ -328,6 +328,24 @@ function calculateAddress(address, originAirport, modeTravel) {
   });
 }
 
+function styleDesktopSearch () {
+  $('#purpose').hide("slow");
+  $('.nested-group input').css({
+    "background-color":"rgba(255,255,255,0)",
+    "color":"white"
+  });
+  $('.nested-group div').css({
+    "background-color":"rgba(255,255,255,0)",
+    "border":"1px solid rgba(255,255,255,.25)",
+    "border-right":"none"
+  });
+  $('.nested-group label').css("color","rgba(255,255,255,.5)");
+  $('.nested-group .inline-button').css({
+    "border-left":"none",
+    "border-right":"1px solid rgba(255,255,255,.25)"
+  });
+}
+
 $(document).ready(function () {
   picker = new Pikaday({ //initializes datepicker that works universally cross-browser. HTML5 Date input only works in Chrome and Opera
     field: document.getElementById('departureDate'),
@@ -339,21 +357,7 @@ $(document).ready(function () {
 
   $('#calculateButton').click(function () {
     calculateTime();
-    $('#purpose').hide("slow");
-    $('.nested-group input').css({
-      "background-color":"rgba(255,255,255,0)",
-      "color":"white"
-    });
-    $('.nested-group div').css({
-      "background-color":"rgba(255,255,255,0)",
-      "border":"1px solid rgba(255,255,255,.25)",
-      "border-right":"none"
-    });
-    $('.nested-group label').css("color","rgba(255,255,255,.5)");
-    $('.nested-group .inline-button').css({
-      "border-left":"none",
-      "border-right":"1px solid rgba(255,255,255,.25)"
-    });
+    styleDesktopSearch();
   });
 
   $('#mobileCalculateButton').click(function () {
