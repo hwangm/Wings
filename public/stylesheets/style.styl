@@ -7,8 +7,15 @@ body
   font: 14px sans-serif
   -webkit-font-smoothing: antialiased
 a
-  color: #00B7FF
-#mobileButton, #mobileBags, #mobileGettingToAirport, #showMoreOptions
+  color: rgba(255,255,255,0.5) !important
+  text-decoration: none !important
+  border-bottom: 1px solid rgba(255,255,255,0.5)
+a:hover
+  color: white !important
+  text-decoration: none !important
+  border-bottom: 1px solid rgba(255,255,255,1)
+  transition: color 0.3s, border-bottom 0.3s
+#mobileButton, #mobileBags, #mobileGettingToAirport, #showMoreOptions, #timeToLeaveWrapper > a
   display: none
 
 /*
@@ -187,6 +194,10 @@ span.filter-option.pull-left
 #extraDetails > div > div
   padding-left: 2px
   padding-right: 2px
+#timeToAirport, #flightInformation, #arriveAtGate
+  font-size: 16px
+  font-weight: bold
+
 
 /*
 * Styles for the dropdown of the flight suggestions
@@ -314,15 +325,15 @@ img#loadingRow
     margin-top: 5px
   #finalResults
     border: none !important
-
+  body > div.container > h3, #timeToLeave
+    margin-top: 12px
 
 /*
 * Footer
 */
 
 .footer
-  position: absolute
-  bottom: 0
+  display: none
   height: 60px
   a
     margin: auto 5px auto 5px
