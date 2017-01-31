@@ -302,16 +302,17 @@ function calculateAddress(address, originAirport, modeTravel) {
       console.log(response);
       var time = response.routes[0].legs[0].duration.text;
       value = response.routes[0].legs[0].duration.value; //response.routes.legs.duration.value is the duration in seconds
+      var dirLink = "https://www.google.com/maps/dir/"+encodeURI(response.routes[0].legs[0].start_address)+"/"+encodeURI(response.routes[0].legs[0].end_address);
 
       //console.log(time);
       $('#loadingRow').hide(200, function () {
-        $('#timeToAirportDetails').append('From ' + address + ', <a id="openMapLink" href="#">it will take ' + time + ' to get to ' + originAirport + '</a>.');
-        $('#openMapLink').on('click', function() {
-          $('#map').toggle();
-          if($('#right-panel').children().length == 0){
-            plotDirections(response);
-          }
-        });
+        $('#timeToAirportDetails').append('From ' + address + ', <a id="openMapLink" href="'+dirLink+'" target="_blank">it will take ' + time + ' to get to ' + originAirport + '</a>.');
+        // $('#openMapLink').on('click', function() {
+        //   $('#map').toggle();
+        //   if($('#right-panel').children().length == 0){
+        //     plotDirections(response);
+        //   }
+        // });
         calculateTimeToLeave(departuretime, value, bags, TSAPre, originAirport);
       });
     }
