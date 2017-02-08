@@ -107,6 +107,29 @@ function inputFieldsAreNotEmpty(){
   return ($('#location').val() != "") && ($('#flight').val() != "") && ($('#departureDate').val() != "");
 }
 
+function getAirportLatLong(a, o, m){
+  $.ajax({
+    type: 'GET',
+    url: '/api/fxmlairport',
+    data: { 'airportCode': o },
+    success: function (result) {
+      console.log(result);
+      var lat = String(result.AirportInfoResult.latitude);
+      var long = String(result.AirportInfoResult.longitude);
+      var airportName = result.AirportInfoResult.name;
+      var res = lat + ',' + long;
+      calculateAddress(a, res, m, (airportName + ' Airport'));
+    },
+    error: function (data, text) {
+      $('#loadingRow').hide(200, function () {
+        $('#errorWrapper').text('There was a problem getting the flight information. Please try again.');
+      });
+    },
+    dataType: 'json',
+    xhrFields: { withCredentials: true }
+  });
+}
+
 function calculateTime() {
   if(!inputFieldsAreNotEmpty()){
     return;
@@ -163,6 +186,9 @@ function calculateTime() {
       break;
     case "Y4":
       airlineCode = "VOI";
+      break;
+    case "VX":
+      airlineCode = "VRD";
       break;
     default:
       airlineCode = airlineCode.toUpperCase();
@@ -221,8 +247,10 @@ function calculateTime() {
             $('.clickable-row').click(function () {
               departuretime = $(this).data('departuretime');
               origin = $(this).data('origin');
+              
               $('#chooseFlightModal').modal('hide');
-              calculateAddress(address, origin.slice(1), modeTravel);
+              getAirportLatLong(address, origin, modeTravel);
+              //calculateAddress(address, origin, modeTravel);
             });
           });
         }
@@ -230,7 +258,7 @@ function calculateTime() {
           departuretime = result.AirlineFlightSchedulesResult.data[0].departuretime;
           localTime = epochToLocalTime(departuretime);
           originAirport = result.AirlineFlightSchedulesResult.data[0].origin;
-          calculateAddress(address, originAirport.slice(1), modeTravel);
+          getAirportLatLong(address, originAirport, modeTravel);
         }
       }
     },
@@ -291,7 +319,7 @@ function plotDirections(d){
   $('#right-panel').css('background-color', 'white');
 }
 
-function calculateAddress(address, originAirport, modeTravel) {
+function calculateAddress(address, originAirport, modeTravel, airportName) {
   directionsService.route({
     origin: address,
     destination: originAirport,
@@ -306,19 +334,17 @@ function calculateAddress(address, originAirport, modeTravel) {
 
       //console.log(time);
       $('#loadingRow').hide(200, function () {
-        $('#timeToAirportDetails').append('From ' + address + ', <a id="openMapLink" href="'+dirLink+'" target="_blank">it will take ' + time + ' to get to ' + originAirport + '</a>.');
+        $('#timeToAirportDetails').append('From ' + address + ', <a id="openMapLink" href="'+dirLink+'" target="_blank">it will take ' + time + ' to get to ' + airportName + '</a>.');
         // $('#openMapLink').on('click', function() {
         //   $('#map').toggle();
         //   if($('#right-panel').children().length == 0){
         //     plotDirections(response);
         //   }
         // });
-        calculateTimeToLeave(departuretime, value, bags, TSAPre, originAirport);
+        calculateTimeToLeave(departuretime, value, bags, TSAPre, airportName);
       });
     }
     else {
-      //console.log('failure, response: ');
-      //console.log(response);
       $('#loadingRow').hide(200, function () {
         $('#errorWrapper').text('There was a problem getting directions to the origin airport. Please try again.');
       });

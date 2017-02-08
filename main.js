@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var dotenv = require('dotenv').config();
 var restclient = require('restler');
-var fxml_url = "http://flightxml.flightaware.com/json/FlightXML2/AirlineFlightSchedules";
+var fxml_schedule_url = "http://flightxml.flightaware.com/json/FlightXML2/AirlineFlightSchedules";
+var fxml_airport_url = "http://flightxml.flightaware.com/json/FlightXML2/AirportInfo";
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -32,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //flightxml api request handler to hide the api key
 app.get('/api/flightxml', function(req, res){
-    restclient.get(fxml_url, {
+    restclient.get(fxml_schedule_url, {
         username: "hwangm",
         password: process.env.FLIGHTXML_API_KEY,
         query: {
@@ -48,8 +49,21 @@ app.get('/api/flightxml', function(req, res){
     }).on('error', function(result, response){
         res.json(result);
     });
-    
-})
+});
+
+app.get('/api/fxmlairport', function(req, res){
+    restclient.get(fxml_airport_url, {
+        username: "hwangm",
+        password: process.env.FLIGHTXML_API_KEY,
+        query: {
+          airportCode: req.query.airportCode  
+        }
+    }).on('success', function(result, response){
+        res.json(result);
+    }).on('error', function(result, response){
+        res.json(result);
+    });
+});
 
 app.use('/', routes);
 app.use('/users', users);
