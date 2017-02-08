@@ -6,17 +6,10 @@ body
   padding: 50px
   font: 14px sans-serif
   -webkit-font-smoothing: antialiased
-a
-  color: rgba(255,255,255,0.5) !important
-  text-decoration: none !important
-  border-bottom: 1px solid rgba(255,255,255,0.5)
-a:hover
-  color: white !important
-  text-decoration: none !important
-  border-bottom: 1px solid rgba(255,255,255,1)
-  transition: color 0.3s, border-bottom 0.3s
 #mobileButton, #mobileBags, #mobileGettingToAirport, #showMoreOptions, #timeToLeaveWrapper > a
   display: none
+button:focus, button:active, div:focus, div:active, span:focus, span:active, .bootstrap-select .dropdown-toggle:focus
+  outline: 0 !important
 
 /*
 * Styles for the Wings logo and intro text ("Quickly figure out what time to leave for the airport")
@@ -197,7 +190,19 @@ span.filter-option.pull-left
 #timeToAirport, #flightInformation, #arriveAtGate
   font-size: 16px
   font-weight: bold
-
+#extraDetails > div > div.btn-group.bootstrap-select.show-tick.fit-width.open > div > ul > li > a
+  font-color: #191C23 !important
+#extraDetails > div > div.btn-group.bootstrap-select.show-tick.fit-width.open > div > ul > li > a:hover
+  font-color: #191C23 !important
+#showMoreOptions > div > a, #timeToAirportDetails a, #timeToLeaveWrapper a
+  color: rgba(255,255,255,0.5)
+  text-decoration: none !important
+  border-bottom: 1px solid rgba(255,255,255,0.5)
+#showMoreOptions > div > a:hover, #timeToAirportDetails a:hover, #timeToLeaveWrapper a:hover
+  color: white
+  text-decoration: none !important
+  border-bottom: 1px solid rgba(255,255,255,1)
+  transition: color 0.1s, border-bottom 0.3s
 
 /*
 * Styles for the dropdown of the flight suggestions
