@@ -4,6 +4,16 @@ function initMap() {
   directionsService = new google.maps.DirectionsService;
 }
 
+(function (i, s, o, g, r, a, m) {
+i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+  (i[r].q = i[r].q || []).push(arguments)
+}, i[r].l = 1 * new Date(); a = s.createElement(o),
+  m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+ga('create', 'UA-91618893-1', 'auto');
+ga('send', 'pageview');
+
 // s is format yyyy-mm-dd
 // Returns the Unix time for a given date. Specify "s" to get start date (at midnight by default), or 'e' for end date at 2359.
 function parseDate(s, startOrEnd) {
@@ -39,7 +49,7 @@ function parseFlight(s, w) {
 //given an epoch time, this function returns the local time in a human readable format
 function epochToLocalTime(t) {
   var d = new Date(t * 1000);
-  var options = { timeZoneName: "short" }
+  var options = { timeZoneName: "short" };
   return d.toLocaleString('en-US', options);
 }
 
@@ -49,22 +59,22 @@ function showLoadingIcon() {
   $('#loadingRow').show(200).delay(200).fadeOut("fast");
 }
 
-//given the number of bags to check, this function returns a string telling the user how much extra time to account for when checking bags
-function calculateBagTime(num) {
-  switch (num) {
-    case 0:
-      return 'You have no bags!';
-      break;
-    case 1:
-      return 'Checking in your one bag will take about 20 minutes';
-      break;
-    case '2+':
-      return 'Checking in your multiple bags will take about 25 minutes';
-      break;
-    default:
-      return 'You have no bags!';
-  }
-}
+// //given the number of bags to check, this function returns a string telling the user how much extra time to account for when checking bags
+// function calculateBagTime(num) {
+//   switch (num) {
+//     case 0:
+//       return 'You have no bags!';
+//       break;
+//     case 1:
+//       return 'Checking in your one bag will take about 20 minutes';
+//       break;
+//     case '2+':
+//       return 'Checking in your multiple bags will take about 25 minutes';
+//       break;
+//     default:
+//       return 'You have no bags!';
+//   }
+// }
 
 //this function clears the modal popup and time results of previous flight results if user searches more than one time in a session
 function resetPage() {
@@ -89,10 +99,10 @@ function areFlightsAllSameCodeShares(data, length) {
   console.log(data);
   // console.log(actualIdentifierArray);
   // console.log(identifierArray);
-  if(length > 1){
+  if (length > 1) {
     for (var j = 1; j < length; j++) {
       console.log(data[j].ident + ' departure time at ' + data[j].departuretime);
-      if (data[j].departuretime  != data[0].departuretime) {
+      if (data[j].departuretime != data[0].departuretime) {
         //console.log(actualIdentifierArray[j] + "compared to " + actualIdentifierArray[0] + " is not equal")
         result = false;
       }
@@ -103,11 +113,11 @@ function areFlightsAllSameCodeShares(data, length) {
 
 }
 
-function inputFieldsAreNotEmpty(){
+function inputFieldsAreNotEmpty() {
   return ($('#location').val() != "") && ($('#flight').val() != "") && ($('#departureDate').val() != "");
 }
 
-function getAirportLatLong(a, o, m){
+function getAirportLatLong(a, o, m) {
   $.ajax({
     type: 'GET',
     url: '/api/fxmlairport',
@@ -131,7 +141,7 @@ function getAirportLatLong(a, o, m){
 }
 
 function calculateTime() {
-  if(!inputFieldsAreNotEmpty()){
+  if (!inputFieldsAreNotEmpty()) {
     return;
   }
   resetPage();
@@ -211,8 +221,6 @@ function calculateTime() {
       //departure time (in UTC epoch time/seconds) - need to convert to local timestamp
       //origin airport code
       var resultLength = result.AirlineFlightSchedulesResult.data.length;
-      //var allCodeShares = areFlightsAllSameCodeShares(result.AirlineFlightSchedulesResult.data, resultLength);
-
       if (resultLength == 0) {
         $('#loadingRow').hide(200, function () {
           $('#errorWrapper').text('No flights found with the flight number and date. Please try again.');
@@ -227,10 +235,6 @@ function calculateTime() {
         if ((resultLength > 1) && !areFlightsAllSameCodeShares(result.AirlineFlightSchedulesResult.data, resultLength)) {
           for (var i = 0; i < resultLength; i++) {
             var element = result.AirlineFlightSchedulesResult.data[i];
-            //- departureTimeArray.push(epochToLocalTime(element.departuretime));
-            //- departureAirportArray.push(element.origin);
-            //- identifierArray.push(element.ident); //actual_ident is only populated if ident is different (for codeshares)
-            //- actualIdentifierArray.push(element.actual_ident);
             if (element.actual_ident == "") { //filter repeat flights from codeshares
               var row = "<tr class='clickable-row' id='" + i + "' data-origin='" + element.origin + "' data-departuretime=" + element.departuretime + "><td>" + element.ident + "</td><td>" + element.origin + " to " + element.destination + "</td><td>" + epochToLocalTime(element.departuretime) + "</td></tr>";
               $('#insertFlightChoicesHere').prepend(row);
@@ -247,7 +251,6 @@ function calculateTime() {
             $('.clickable-row').click(function () {
               departuretime = $(this).data('departuretime');
               origin = $(this).data('origin');
-              
               $('#chooseFlightModal').modal('hide');
               getAirportLatLong(address, origin, modeTravel);
               //calculateAddress(address, origin, modeTravel);
@@ -268,12 +271,11 @@ function calculateTime() {
       });
     },
     dataType: 'json',
-    //jsonp: 'jsonp_callback',
     xhrFields: { withCredentials: true }
   });
 }
 
-function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre, airport){
+function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre, airport) {
   console.log(epochToLocalTime(departuretime));
   var timezone = epochToLocalTime(departuretime).slice(-3);
   timeToLeave = moment(epochToLocalTime(departuretime).slice(0, -4), 'M-DD-YYYY h:mm:ss A').subtract(60, 'm'); //use local time but remove the timezone. boarding time is departuretime - 60 minutes
@@ -281,16 +283,16 @@ function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre, airport){
   $('#arriveAtGate').prepend(timeToLeave.format('h:mm A') + ': Arrive at your gate');
   $('#arriveAtGateDetails').text('You will have 30 minutes to spare before your flight begins to board.');
   var bagsAndSecurityTime = 0;
-  if(bags >= 1){
+  if (bags >= 1) {
     timeToLeave = timeToLeave.subtract(20, 'm'); //add 20 minutes for bag check
     bagsAndSecurityTime = bagsAndSecurityTime + 20;
   }
   console.log('bags' + timeToLeave.format('h:mm A'));
-  if(tsaPre == 1){
+  if (tsaPre == 1) {
     timeToLeave = timeToLeave.subtract(15, 'm'); //add 15 minutes if you have TSA Pre
     bagsAndSecurityTime = bagsAndSecurityTime + 15;
   }
-  else{
+  else {
     timeToLeave = timeToLeave.subtract(45, 'm'); //add 45 minutes if you do not have TSA Pre
     bagsAndSecurityTime = bagsAndSecurityTime + 45;
   }
@@ -300,24 +302,24 @@ function calculateTimeToLeave(departuretime, traveltime, bags, tsaPre, airport){
   timeToLeave = timeToLeave.subtract(traveltime, 's'); //add the travel time in seconds, calculated by google maps
   console.log('travelTime' + timeToLeave.format('h:mm A'));
 
-  $('#timeToLeave').text('You should leave for the airport at ' + timeToLeave.format('h:mm A ') + timezone +'.');
+  $('#timeToLeave').text('You should leave for the airport at ' + timeToLeave.format('h:mm A ') + timezone + '.');
   $('#flightInformationWrapper').show(200);
   $('#timeToAirportWrapper').show(200);
   $('#arriveAtGateWrapper').show(200);
   $('#timeToAirport').prepend(timeToLeave.format('h:mm A') + ': Leave for ' + airport);
 }
 
-//input: DirectionsResult d (from google directions service query)
-function plotDirections(d){
-  directionsDisplay = new google.maps.DirectionsRenderer();
-  map = new google.maps.Map(document.getElementById('map-panel'), {
-    zoom: 4
-  });
-  directionsDisplay.setMap(map);
-  directionsDisplay.setDirections(d);
-  directionsDisplay.setPanel(document.getElementById('right-panel'));
-  $('#right-panel').css('background-color', 'white');
-}
+// //input: DirectionsResult d (from google directions service query)
+// function plotDirections(d) {
+//   directionsDisplay = new google.maps.DirectionsRenderer();
+//   map = new google.maps.Map(document.getElementById('map-panel'), {
+//     zoom: 4
+//   });
+//   directionsDisplay.setMap(map);
+//   directionsDisplay.setDirections(d);
+//   directionsDisplay.setPanel(document.getElementById('right-panel'));
+//   $('#right-panel').css('background-color', 'white');
+// }
 
 function calculateAddress(address, originAirport, modeTravel, airportName) {
   directionsService.route({
@@ -330,11 +332,11 @@ function calculateAddress(address, originAirport, modeTravel, airportName) {
       console.log(response);
       var time = response.routes[0].legs[0].duration.text;
       value = response.routes[0].legs[0].duration.value; //response.routes.legs.duration.value is the duration in seconds
-      var dirLink = "https://www.google.com/maps/dir/"+encodeURI(response.routes[0].legs[0].start_address)+"/"+encodeURI(response.routes[0].legs[0].end_address);
+      var dirLink = "https://www.google.com/maps/dir/" + encodeURI(response.routes[0].legs[0].start_address) + "/" + encodeURI(response.routes[0].legs[0].end_address);
 
       //console.log(time);
       $('#loadingRow').hide(200, function () {
-        $('#timeToAirportDetails').append('From ' + address + ', <a id="openMapLink" href="'+dirLink+'" target="_blank">it will take ' + time + ' to get to ' + airportName + '</a>.');
+        $('#timeToAirportDetails').append('From ' + address + ', <a id="openMapLink" href="' + dirLink + '" target="_blank">it will take ' + time + ' to get to ' + airportName + '</a>.');
         // $('#openMapLink').on('click', function() {
         //   $('#map').toggle();
         //   if($('#right-panel').children().length == 0){
@@ -352,29 +354,29 @@ function calculateAddress(address, originAirport, modeTravel, airportName) {
   });
 }
 
-function styleDesktopSearch () {
-  if(!inputFieldsAreNotEmpty()){
+function styleDesktopSearch() {
+  if (!inputFieldsAreNotEmpty()) {
     return;
   }
   $('#purpose').hide("slow");
   $('.nested-group input').css({
-    "background-color":"rgba(255,255,255,0)",
-    "color":"white"
+    "background-color": "rgba(255,255,255,0)",
+    "color": "white"
   });
   $('.nested-group div').css({
-    "background-color":"rgba(255,255,255,0)",
-    "border":"1px solid rgba(255,255,255,.25)",
-    "border-right":"none"
+    "background-color": "rgba(255,255,255,0)",
+    "border": "1px solid rgba(255,255,255,.25)",
+    "border-right": "none"
   });
-  $('.nested-group label').css("color","rgba(255,255,255,.5)");
+  $('.nested-group label').css("color", "rgba(255,255,255,.5)");
   $('.nested-group .inline-button').css({
-    "border-left":"none",
-    "border-right":"1px solid rgba(255,255,255,.25)"
+    "border-left": "none",
+    "border-right": "1px solid rgba(255,255,255,.25)"
   });
 }
 
-function styleMobileSearch () {
-  if(!inputFieldsAreNotEmpty()){
+function styleMobileSearch() {
+  if (!inputFieldsAreNotEmpty()) {
     return;
   }
   $('#purpose').fadeOut("100");
@@ -391,7 +393,7 @@ $(document).ready(function () {
     field: document.getElementById('departureDate'),
     format: 'MM/DD/YYYY',
     minDate: moment().toDate(),
-    maxDate: moment().add(2,'w').toDate()
+    maxDate: moment().add(2, 'w').toDate()
   });
   picker.setDate(moment().format('YYYY-MM-DD'));
 
@@ -407,15 +409,15 @@ $(document).ready(function () {
 
   $('#showMoreOptions').click(function () {
     $('#mobileGettingToAirport').css("display", "block");
-    $('#extraDetails').css("display","block");
-    $(this).css("display","none");
-  })
+    $('#extraDetails').css("display", "block");
+    $(this).css("display", "none");
+  });
 
-  $('#form1').submit(function(){
+  $('#form1').submit(function () {
     return false;
-  })
+  });
 
   $('#recalculate').click(function () {
     resetPage();
-  })
+  });
 });
