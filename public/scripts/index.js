@@ -159,6 +159,7 @@ function calculateTime() {
   //console.log(sDate + ' ' + eDate);
   address = $('#location').val(); //start address
   flight = $('#flight').val(); //flight number
+  flight = flight.replace(/\s+/g, '');
   if (flight == "") {
     flight = "UAL1892";
   }
