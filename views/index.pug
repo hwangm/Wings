@@ -1,6 +1,25 @@
 ﻿extends layout
 
 block content
+  div.modal.fade#chooseFlightModal(role="dialog")
+            div.modal-dialog(role="document")
+              div.modal-content
+                div.modal-header
+                  b Multiple flights were found, please choose the correct flight
+                  button.close(type="button", data-dismiss="modal", aria-label="close")
+                    span(aria-hidden="true") &times;
+                div.modal-body
+                  div.row
+                    div.col-md-12
+                      table.table
+                        thead
+                          tr
+                            th Flight Number
+                            th Route
+                            th Departure Date/Time
+                        tbody#insertFlightChoicesHere
+                div.modal-footer
+                  button.btn.btn-default(type="button", data-dismiss="modal") Close
   div.row#navHeader
     div.col-md-12 Very Well Timed
   h3#purpose Quickly figure out when to leave for the airport.
@@ -8,25 +27,6 @@ block content
   form(method="get", name="form1", id="form1")
     div.row#currentStepContainer
       div.col-md-12
-        div.modal.fade#chooseFlightModal(role="dialog")
-          div.modal-dialog(role="document")
-            div.modal-content
-              div.modal-header
-                b Multiple flights were found, please choose the correct flight
-                button.close(type="button", data-dismiss="modal", aria-label="close")
-                  span(aria-hidden="true") &times;
-              div.modal-body
-                div.row
-                  div.col-md-12
-                    table.table
-                      thead
-                        tr
-                          th Flight Number
-                          th Route
-                          th Departure Date/Time
-                      tbody#insertFlightChoicesHere
-              div.modal-footer
-                button.btn.btn-default(type="button", data-dismiss="modal") Close
         div.form-group.nested-group(id="step1")
           div#locationWrapper.col-md-5
             label(for="location") Where are you coming from?

@@ -59,23 +59,6 @@ function showLoadingIcon() {
   $('#loadingRow').show(200).delay(200).fadeOut("fast");
 }
 
-// //given the number of bags to check, this function returns a string telling the user how much extra time to account for when checking bags
-// function calculateBagTime(num) {
-//   switch (num) {
-//     case 0:
-//       return 'You have no bags!';
-//       break;
-//     case 1:
-//       return 'Checking in your one bag will take about 20 minutes';
-//       break;
-//     case '2+':
-//       return 'Checking in your multiple bags will take about 25 minutes';
-//       break;
-//     default:
-//       return 'You have no bags!';
-//   }
-// }
-
 //this function clears the modal popup and time results of previous flight results if user searches more than one time in a session
 function resetPage() {
   $('#insertFlightChoicesHere').empty();
@@ -96,21 +79,15 @@ function resetPage() {
 //given the AirlineFlightSchedulesResult from flightXML, this function determines if all the returned flights are codeshares for the same flight
 function areFlightsAllSameCodeShares(data, length) {
   var result = true;
-  console.log(data);
-  // console.log(actualIdentifierArray);
-  // console.log(identifierArray);
+  //console.log(data);
   if (length > 1) {
     for (var j = 1; j < length; j++) {
-      console.log(data[j].ident + ' departure time at ' + data[j].departuretime);
       if (data[j].departuretime != data[0].departuretime) {
-        //console.log(actualIdentifierArray[j] + "compared to " + actualIdentifierArray[0] + " is not equal")
         result = false;
       }
     }
   }
-  //console.log(result);
   return result;
-
 }
 
 function inputFieldsAreNotEmpty() {
@@ -138,6 +115,35 @@ function getAirportLatLong(a, o, m) {
     dataType: 'json',
     xhrFields: { withCredentials: true }
   });
+}
+
+function getUniqueFlightTimes(data, length){
+  // how to figure out which flights are codeshares:
+  // just departure time would be enough
+  // loop through flights, compare one departure time to the others? 
+  // if there is a match then add this one to the inclusion list and the other one to the exclusion list
+  // if first compared departuretime is not in exclusion list then compare it to others 
+  var includeList = [];
+  var excludeList = [];
+  for(var i=0; i<length; i++){
+    if(excludeList.indexOf(i) == -1){
+      if(i+1 == length){
+        includeList.push(i);
+      }
+      else{
+        for(var j = i+1; j<length; j++){
+          if(data[i].departuretime == data[j].departuretime){
+            includeList.push(i);
+            excludeList.push(j);
+          }
+          else includeList.push(i);
+        }
+      }
+    }
+  }
+  console.log(includeList);
+  console.log(excludeList);
+  return includeList;
 }
 
 function calculateTime() {
@@ -233,9 +239,10 @@ function calculateTime() {
         //- departure airport (and maybe arrival airport)
 
         if ((resultLength > 1) && !areFlightsAllSameCodeShares(result.AirlineFlightSchedulesResult.data, resultLength)) {
+          var flightlist = getUniqueFlightTimes(result.AirlineFlightSchedulesResult.data, resultLength);
           for (var i = 0; i < resultLength; i++) {
             var element = result.AirlineFlightSchedulesResult.data[i];
-            if (element.actual_ident == "") { //filter repeat flights from codeshares
+            if (flightlist.indexOf(i) != -1) { //filter repeat flights from codeshares
               var row = "<tr class='clickable-row' id='" + i + "' data-origin='" + element.origin + "' data-departuretime=" + element.departuretime + "><td>" + element.ident + "</td><td>" + element.origin + " to " + element.destination + "</td><td>" + epochToLocalTime(element.departuretime) + "</td></tr>";
               $('#insertFlightChoicesHere').prepend(row);
             }
